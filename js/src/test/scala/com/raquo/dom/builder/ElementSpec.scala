@@ -1,5 +1,6 @@
 package com.raquo.dom.builder
 
+import com.raquo.dom.builder.jsdom.simple.implicits._
 import com.raquo.dom.builder.jsdom.simple.nodes.SimpleComment
 import com.raquo.dom.builder.jsdom.simple.tags.{div, hr, p, span}
 import com.raquo.dom.builder.jsdom.simple.tags2.article

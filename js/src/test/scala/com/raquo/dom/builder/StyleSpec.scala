@@ -1,7 +1,8 @@
 package com.raquo.dom.builder
 
-import com.raquo.dom.builder.jsdom.simple.tags.div
+import com.raquo.dom.builder.jsdom.simple.implicits._
 import com.raquo.dom.builder.jsdom.simple.styles.{display, height, width}
+import com.raquo.dom.builder.jsdom.simple.tags.div
 
 import scala.util.Random
 

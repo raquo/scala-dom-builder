@@ -1,7 +1,8 @@
 package com.raquo.dom.builder
 
-import com.raquo.dom.builder.jsdom.simple.tags.{div, input, span, td}
+import com.raquo.dom.builder.jsdom.simple.implicits._
 import com.raquo.dom.builder.jsdom.simple.props.{alt, colSpan, disabled, href, rel, rowSpan}
+import com.raquo.dom.builder.jsdom.simple.tags.{div, input, span, td}
 
 import scala.util.Random
 

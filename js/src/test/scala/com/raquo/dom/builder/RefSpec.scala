@@ -1,5 +1,6 @@
 package com.raquo.dom.builder
 
+import com.raquo.dom.builder.jsdom.simple.implicits._
 import com.raquo.dom.builder.jsdom.simple.tags.div
 
 class RefSpec extends UnitSpec {
@@ -10,7 +11,7 @@ class RefSpec extends UnitSpec {
     node.ref.parentNode shouldBe null
 
     mount(node)
-    node.ref.parentNode shouldBe container
+    node.ref.parentNode shouldBe containerNode
 
     unmount()
     node.ref.parentNode shouldBe null
