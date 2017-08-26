@@ -1,9 +1,10 @@
 package com.raquo.dom.builder.example.components
 
 import com.raquo.dom.builder.jsdom.simple
-import com.raquo.dom.builder.jsdom.simple.{attrs, events, styles}
+import com.raquo.dom.builder.jsdom.simple.implicits._
 import com.raquo.dom.builder.jsdom.simple.nodes.{SimpleElement, SimpleText}
-import com.raquo.dom.builder.jsdom.simple.tags._
+import com.raquo.dom.builder.jsdom.simple.tags.{button, div, h1}
+import com.raquo.dom.builder.jsdom.simple.{attrs, events, styles}
 import org.scalajs.dom
 
 class Counter { // This doesn't need to be a class, could be anything

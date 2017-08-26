@@ -12,9 +12,12 @@ import com.raquo.dom.types.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEven
 import com.raquo.dom.types.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, TableTags, TextTags}
 import org.scalajs.dom
 
-package object simple extends SharedSimple with syntax.Implicits {
+package object simple extends SharedSimple {
 
   type SimpleHtmlElement = SimpleElement[dom.html.Element]
+
+  /** Import `implicits._` to get access to composition methods := and TagSyntax.apply */
+  object implicits extends syntax.Implicits {}
 
   object events
     extends MouseEventProps[EventProp]
@@ -23,8 +26,6 @@ package object simple extends SharedSimple with syntax.Implicits {
     with ClipboardEventProps[EventProp]
     with ErrorEventProps[EventProp]
     with SimpleEventBuilder
-    with syntax.Implicits
-
 
   object tags
     extends DocumentTags[SimpleTag]
@@ -35,23 +36,18 @@ package object simple extends SharedSimple with syntax.Implicits {
     with EmbedTags[SimpleTag]
     with TableTags[SimpleTag]
     with SimpleTagBuilder
-    with syntax.Implicits
 
   object tags2
     extends MiscTags[SimpleTag]
     with SimpleTagBuilder
-    with syntax.Implicits
 
   object styles
     extends Styles[StyleSetter, StringStyleSetter]
     with StyleBuilder
-    with syntax.Implicits
-
 
   object styles2
     extends Styles2[StyleSetter, StringStyleSetter]
     with StyleBuilder
-    with syntax.Implicits
 
   def mount(
     container: dom.Element,

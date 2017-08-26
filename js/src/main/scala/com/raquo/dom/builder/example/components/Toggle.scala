@@ -1,8 +1,9 @@
 package com.raquo.dom.builder.example.components
 
 import com.raquo.dom.builder.jsdom.simple
+import com.raquo.dom.builder.jsdom.simple.implicits._
 import com.raquo.dom.builder.jsdom.simple.{SimpleHtmlElement, attrs, events, styles}
-import com.raquo.dom.builder.jsdom.simple.tags._
+import com.raquo.dom.builder.jsdom.simple.tags.{div, input}
 
 class Toggle(initialIsChecked: Boolean) {
 
