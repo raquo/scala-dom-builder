@@ -7,14 +7,12 @@ import com.raquo.domtestutils.EventSimulator
 import com.raquo.domtestutils.matching.{ExpectedNode, RuleImplicits}
 import com.raquo.domtestutils.scalatest.MountSpec
 import org.scalajs.dom
-import org.scalatest.Suite
 
 trait SimpleSpec
   extends MountSpec[SimpleRefNode]
   with RuleImplicits[SimpleRefNode]
   with EventSimulator
 {
-  this: Suite =>
 
   def mount(node: RefNode[dom.Node], clue: String = defaultMountedElementClue): Unit = {
     mount(node.ref, clue)
