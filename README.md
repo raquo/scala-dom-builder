@@ -1,5 +1,7 @@
 # Scala DOM Builder
 
+## TODO: Update this doc to reflect the split of my DOM projects
+
 Scala DOM Builder provides three things:
 
 * **Type definitions** for creating objects representing HTML DOM Nodes –– see `/definitions` directory
