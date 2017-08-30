@@ -1,23 +1,29 @@
 # Scala DOM Builder
 
-## TODO: Update this doc to reflect the split of my DOM projects
+_Scala DOM Builder_ is a low level, unopinionated library for building and manipulating DOM trees (objects representing HTML tags and their attributes, properties and styles).
 
-Scala DOM Builder provides three things:
+    "com.raquo" %%% "dombuilder" %%% "0.1"
 
-* **Type definitions** for creating objects representing HTML DOM Nodes –– see `/definitions` directory
-* A minimal **library** for building and manipulating DOM trees
-* A **testing framework** to verify real DOM nodes (and trees) against desired state
+This library can be used in two ways: 1) directly for simple things, and 2) as a flexible foundation for a more opinionated UI library.
 
-This project is primarily intended to be used from Scala.js.
+## 1. Simple / Direct Usage
 
-## TODO
+If all you want is a no-hassle, type-safe way to create and manipulate some DOM nodes / trees in Scala.js, use the provided `jsdom.simple` package, it lets you build DOM nodes using syntax similar to ScalaTags:
 
-* Revise the README
-* Publish to Maven Central
+```scala
+val scalaNode = div( // Create a Scala representation of a DOM node. Javascript DOM node gets created automatically at the same time in this example
+  "Hello, ",
+  a(href := "http://example.com", "World"),
+  button(onClick := doSomething, "Do Something!")
+)
+ 
+// Scala Nodes map one-to-one to real Javascript DOM nodes 
+val javascriptDomNode: org.scalajs.dom.Div = scalaNode.ref // This is how you get a reference to the real Javascript DOM node if you need it
+  
+mount(org.scalajs.dom.document.body, scalaNode) // Add the Javascript DOM Node to the rendered page
+```
 
-## Example Component
-
-A very dumb example component using our low-level API:
+You can even build simple components using this low-level API:
 
 ```scala
 class Counter {    // This doesn't need to be a class, all you need is to build a `SimpleElement` somehow
@@ -30,7 +36,7 @@ class Counter {    // This doesn't need to be a class, all you need is to build 
     events.onClick := increment _,                  // Add event listener to the button node
     "[ + ]"                                         // Add a child node (which happens to be a text node) to the button node
   )
- 
+  
   val element: SimpleElement = div(    // Create a node that will be either mounted as a root node or added as a child to another node.
     attrs.cls := "CounterClassBlah",   // Add a CSS class name to this node (not used here, just an example)
     styles.display.inlineBlock,        // Set CSS display property to "inline-block" (just because)
@@ -46,121 +52,39 @@ class Counter {    // This doesn't need to be a class, all you need is to build 
 }
 ```
 
-While this direct usage of Scala DOM Builder's API is acceptable for certain use cases, you typically wouldn't use this library like that, you would build a reactive library on top of Scala DOM Builder. Read more below.
+See `example/components` directory for more examples.
 
-## Rationale
+This kind of design works great for small things, but if you're building rich, interactive web applications there's a better way – use (or make!) a higher level, more opinionated library on top of _Scala DOM Builder_. Read on for how to do that.
 
-### Type Definitions
+## 2. As a Foundation For Other UI Libraries
 
-This project's type definitions are similar to ScalaTags. In fact, all the listings of DOM elements / attributes / etc. I borrowed from there. So why create a new set of these definitions instead of using ScalaTags?
+If you are building a DOM manipulation library in Scala, say you're inventing your own React, you will most probably want to represent either the DOM tree itself or the Component tree, whatever a _Component_ might be in your library. Scala DOM Builder's API was designed specifically for this use case – to serve as a low level foundation for other libraries.
 
-Mostly this is because we strive to be more type-safe than ScalaTags. For example, in ScalaTags you can give an integer attribute a string value (@TODO: Double-check this particular claim). The compiler won't let you do that with Scala DOM builder.
+This is similar to how Snabbdom is the foundation for many popular Javascript libraries, except Snabbdom gives you a virtual DOM solution. Scala DOM Builder is not a virtual DOM out of the box. We do not keep track of the DOM state other than the parent/child relationship of nodes. You could certainly implement a type safe virtual DOM library on top of _Scala DOM Builder_ though!
 
-In time I will try to add even better types, perhaps even tie "input" elements to `HTMLInputElement`.
+_Scala DOM Builder_ is specifically designed to serve as a foundation for more advanced, more opinionated libraries. By itself it is very flexible, it doesn't get in your way with its own opinions. It essentially lets you represent the mutable state of the DOM – your fancy functional reactive / monadic library will have to deal with that mutable state either way, but at least with Scala DOM Builder you can do it from a more convenient, type-safe API.
 
-You can use Scala DOM Builder's type definitions without using the rest of the library. ~~For example, this is what Snabbdom.scala does.~~ (not yet)
-
-### DOM Tree Building Library
-
-Our `Node` trait lets you build a tree of `Node` objects that map one-to-one (for now) to real DOM objects. `Node`'s API allows you to manipulate the underlying DOM effectively from Scala.
-
-Some of your Nodes could in fact be stateful components that manage themselves and their children. This is trivially achievable by extending `Node` or by any other means, really. This library has no opinion on how you should structure your application.
-
-The DOM tree represents DOM as it is – a bunch of mutable state. There is no virtual DOM, no reactive streams, observables, monads or anything like that. THis library is deliberately low-level and unopinionated. It has no paradigms or ideology to push on you.
-
-#### A. Foundation For Other DOM Manipulation Libraries
-
-If you are building a DOM manipulation library in Scala, you will most probably want to represent either the DOM tree itself or the Component tree, whatever a Component is in your library. Scala DOM Builder's API was designed specifically for his use case – to serve as a low level foundation for other libraries.
-
-This is similar to how Snabbdom is the foundation for many popular Javascript libraries, except Snabbdom gives you a virtual DOM solution. Scala DOM Builder does not use virtual DOM, we do not keep track of the DOM state other than the parent/child relationship of nodes. You could trivially do that in your own library code of course.
-
-Scala DOM Builder is particularly well suited for building libraries on top of because it's so unopinionated. It basically represents the mutable state of the DOM – your fancy functional reactive / monadic library will have to deal with that mutable state either way, but at least with Scala DOM Tree you can do it with a more convenient API.
-
-#### B. Direct Usage
-
-Even though the DOM Builder API is pretty low-level, you can still use it directly, without building a DOM manipulation library on top of it. It is actually remarkably simple, akin to old-school Javascript development from the days when jQuery was a cool application development framework.
-
-If you want to do this, check out the `simple` package. See `example/components` directory for examples.
-
-However, be cautioned that without a thought-out framework on top, your code will soon become an incomprehensible mess. It is fine for small components, e.g. when you need to add a bit of Javascript functionality to an otherwise static HTML page, but for any significant application development you should not be using Scala DOM Builder directly.
-
-This is because Scala DOM Builder deliberately does not have a mechanism for declarative UI programming. All you can do without building a library on top of Scala DOM Builder is to write code that mutates the DOM. This goes against the last few years of UI development best practices. The current generally accepted UI development paradigm is to represent your DOM as a function of the UI state as opposed to writing callbacks that perform DOM state transitions.
-
-For example, [Laminar](https://github.com/raquo/laminar) lets you build UI components in a functional reactive way. It was originally based on Snabbdom, and had a lot of unnecessary complexity in its code to deal with the impedance mismatch between its reactive streams API and the virtual DOM paradigm. It is now based on Scala DOM Builder, and its code is considerably smaller and faster as a result.
-
-However, direct usage of Scala DOM Tree still provides a significant advantage over using plain jQuery. Typical jQuery usage involves querying the DOM all the time. That is a very fragile operation because you're relying on a particular DOM structure including particular nesting and CSS styles.
-
-In contrast, if you were to write components using raw Scala DOM Builder you would always have direct references to all the elements that you care about (see example components).
-
-### Testing framework
-
-We have a testing framework that lets you assert that a real DOM node matches a certain description. You can use without using Scala DOM Builder. For example:
-
-```scala
-mount(
-  div(
-    rel := "yolo"
-    span(text1),
-    p(text2, span(text2), span(text3)),
-    hr
-  )
-)
-
-expectNode(div like(
-  rel is "yolo",
-  span like text1,
-  p like (text2, span like text2, span like text3),
-  hr likeWhatever
-))
-```
-
-Yes, `likeWhatever` is our actual API. It could have been called `exists`, but where's the fun in that?
-
-## Why Not Virtual DOM?
-
-### How Scala DOM Builder Works
-
-Scala DOM Builder only keeps track of the tree structure: parents, children, references to real DOM nodes. That's it. It does not keep track of all the attributes / props / etc. that you set on those nodes. If you need to read those values (which you typically don't), you can easily get them from the real DOM since we give you handy references to all your DOM elements.
-
-Scala DOM Builder makes minimal, precision DOM updates without spending the cycles to figure out what needs to be done. When you need to update the DOM, e.g. set a node's attribute to the new value, Scala DOM Builder does just that – fires off a method that calls `setAttribute` on the real DOM node. No need for querying the DOM, no need to re-render the whole component, no more work to be done.
-
-### Why Virtual DOM Is A Thing
-
-Virtual DOM operates on a different principle. Virtual DOM library keeps track not only of the DOM tree it manages, but also of all the attributes and props that you have set on all the nodes.
-
-When you want to update the DOM, you need to provide the virtual DOM library with an updated version of the virtual node that you want to update. So if you want to update an attribute, it needs to be the same as before (with all the other attributes and props and children), but with one attribute updated to the new value. Then you ask the virtual DOM library to update the old virtual node to the state of the new virtual node.
-
-The library will then compare the two virtual nodes and make a list of changes that need to be applied to the real DOM. Depending on how exactly the whole thing is implemented, it will probably need to go and recursively compare the children as well. This is a lot of work, and for what – to just update one attribute, in this case.
-
-So if virtual DOM is so inefficient, then why is that concept so popular? This goes back to what I've said above about writing your UI in a declarative manner. Some libraries like React.js give you a way to declare your desired DOM state as a function of the component's state (and props). Then, when the component's state/props change, React just re-runs the whole component, generating a new representation of the desired DOM tree.
-
-Within such a framework, virtual DOM makes total sense – you have previous virtual DOM state, next virtual DOM state, and you don't know what changed in between, so you need to do the math to figure it out. Your only other alternative within that paradigm would be to scrap the old DOM tree (the real one, not virtual) and re-create the real DOM elements from the new description. However, that would be painfully slow as you would need to potentially re-create the entire application's DOM Tree if the update happens high up in the DOM tree hierarchy.
-
-### Reactive Streams – Alternative For Declarative UI Programming
-
-However, React's way is this is not the only way to write UI declaratively. Reactive streams (observables) is another paradigm. Using this approach you don't necessarily need a virtual DOM.
-
-For example, you could represent an attribute's value as a stream of values to declare that it changes over time. Whenever you post a new value to that stream, the library would make a precision update to the DOM to update that one attribute, no virtual DOM needed, no further work required. Sounds familiar?
-
-Oh yes, that's exactly what Scala DOM Builder does, except that it's unaware of the whole concept of reactive streams. So in other words, Scala DOM Builder doesn't do what is arguably the most interesting part in this story, the reactive part. This is because how exactly reactive programming should be done is pretty subjective. Scala DOM Builder exists to facilitate experimentation and evolution in that direction, not to provide opinions.
-   
-Case in point, [Laminar](https://github.com/raquo/laminar) lets you build UI components in a functional reactive way. It was originally based on Snabbdom, and had a lot of unnecessary complexity in its code to deal with the impedance mismatch between its reactive streams API and the virtual DOM paradigm. It is now based on Scala DOM Builder, and its code is considerably smaller and faster as a result.
-
+For an example on how to build your own library on top of _Scala DOM Builder_, check out the code of my library [Laminar](https://github.com/raquo/laminar) which lets you build UI components in a functional reactive way. It was originally based on Snabbdom, and had a lot of unnecessary complexity in its code to deal with the impedance mismatch between the reactive streams API that it provides and the virtual DOM paradigm that it had to be aware of. It is now based on _Scala DOM Builder_, and its code is considerably smaller and faster as a result.
 
 ## Server Side Rendering
 
-Right now Scala DOM Builder only works in Scala.js environment (not the JVM) because that's our primary use case. Parts of this project still depend on types provided by Scala.js.
+Even though Javascript DOM and the Scala.js interface to it are not available on the JVM, many _Scala DOM Builder_ components work just fine on the JVM, lacking only the Javascript-interfacing implementations. So you can certainly build JVM things on top of _Scala DOM Builder_, but it's kind of uncharted territory right now. I don't really know what people would want to use it on the JVM for, so ideas and suggestions in this regard are welcome.
 
-I am working on making Scala DOM Builder generic enough to support the use case of server-side rendering and HTML code generation.
+One thing that I definitely want to implement on the JVM is rendering to static HTML code, perhaps even extensible enough to support React-style DOM preloading.
+
+## My Related Projects
+
+- [Scala DOM Types](https://github.com/raquo/scala-dom-types) – Type definitions that we use for all the HTML tags, attributes, properties, and styles
+- [Scala DOM TestUtils](https://github.com/raquo/scala-dom-testutils) – Test that your Javascript DOM nodes match your expectations
+- [Laminar](https://github.com/raquo/laminar) – Reactive UI library based on _Scala DOM Builder_
+- [Snabbdom.scala](https://github.com/raquo/Snabbdom.scala) – Scala.js interface to a popular JS virtual DOM library
+- [XStream.scala](https://github.com/raquo/XStream.scala) – Scala.js interface to a simple JS reactive streams library
+- [Cycle.scala](https://github.com/raquo/Cycle.scala) – Scala.js interface to a popular JS functional reactive library
 
 ## Author
 
 Nikita Gazarov – [raquo.com](http://raquo.com)
 
-## License and Credits
+## License
 
-Scala DOM Builder is provided under MIT license.
-
-Comments marked with "MDN" are taken or derived from content created by Mozilla Contributors and are licensed under Creative Commons Attribution-ShareAlike license (CC-BY-SA), v2.5.
-
-Files in `definitions` directory contain listings of DOM attributes, props, styles, etc. – Those were adapted from ScalaTags.
+Scala DOM Builder is provided under the MIT license.
