@@ -4,15 +4,14 @@ import com.raquo.dombuilder.generic.modifiers.{StringStyleSetter, StyleSetter}
 import com.raquo.dombuilder.generic.simple.SharedSimple
 import com.raquo.dombuilder.jsdom.builders.StyleBuilder
 import com.raquo.dombuilder.jsdom.nodes.ChildNode
-import com.raquo.dombuilder.jsdom.simple.builders.{SimpleTag, SimpleTagBuilder}
-import com.raquo.dombuilder.jsdom.simple.nodes.{SimpleElement, SimpleRoot, SimpleText}
-
+import com.raquo.dombuilder.jsdom.simple.builders.{SimpleCommentBuilder, SimpleTag, SimpleTagBuilder}
+import com.raquo.dombuilder.jsdom.simple.nodes.{SimpleComment, SimpleElement, SimpleRoot, SimpleText}
+import com.raquo.domtypes.generic.builders.Builder
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
 import com.raquo.domtypes.generic.keys.EventProp
 import com.raquo.domtypes.jsdom.builders.EventPropBuilder
 import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MouseEventProps}
 import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, TableTags, TextTags}
-
 import org.scalajs.dom
 
 package object simple extends SharedSimple {
@@ -56,6 +55,8 @@ package object simple extends SharedSimple {
   object styles2
     extends Styles2[StyleSetter, StringStyleSetter]
     with StyleBuilder
+
+  val comment: Builder[SimpleComment] = SimpleCommentBuilder
 
   def mount(
     container: dom.Element,

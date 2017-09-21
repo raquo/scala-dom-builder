@@ -122,7 +122,7 @@ class PropSpec extends UnitSpec {
             expectedText2
           )
         ),
-        span likeWhatever
+        span
       )
     )
   }

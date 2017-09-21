@@ -1,5 +1,6 @@
 package com.raquo.dombuilder
 
+import com.raquo.dombuilder.jsdom.simple.comment
 import com.raquo.dombuilder.jsdom.simple.implicits._
 import com.raquo.dombuilder.jsdom.simple.nodes.SimpleComment
 import com.raquo.dombuilder.jsdom.simple.tags.{div, hr, p, span}
@@ -13,19 +14,19 @@ class ElementSpec extends UnitSpec {
 
   it("renders empty elements") {
     mount("empty <div>", div())
-    expectNode(div likeWhatever)
+    expectNode(div)
     unmount()
 
     mount("empty <span>", span())
-    expectNode(span likeWhatever)
+    expectNode(span)
     unmount()
 
     mount("empty <p>", p())
-    expectNode(p likeWhatever)
+    expectNode(p)
     unmount()
 
     mount("empty <hr>", hr())
-    expectNode(hr likeWhatever)
+    expectNode(hr)
     unmount()
   }
 
@@ -46,7 +47,7 @@ class ElementSpec extends UnitSpec {
   }
 
   it("renders two text nodes") {
-    mount(div(text1, text2))
+    mount(article(text1, text2))
     expectNode(article like (text1, text2))
   }
 
@@ -81,7 +82,7 @@ class ElementSpec extends UnitSpec {
     expectNode(div like(
       span like text1,
       p like (text2, span like text2, span like text3),
-      hr likeWhatever
+      hr
     ))
     unmount()
   }

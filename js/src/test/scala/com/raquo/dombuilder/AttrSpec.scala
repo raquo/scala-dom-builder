@@ -119,7 +119,7 @@ class AttrSpec extends UnitSpec {
             expectedText2
           )
         ),
-        span likeWhatever
+        span
       )
     )
   }
