@@ -7,8 +7,8 @@ import com.raquo.domtypes.generic.keys.Style
 
 trait StyleBuilder extends domtypes.generic.builders.StyleBuilder[StyleSetter, StringStyleSetter] {
 
-  @inline def build[V](jsKey: String, cssKey: String): Style[V] = {
-    new Style[V](jsKey, cssKey)
+  @inline def build[V](key: String, cssKey: String): Style[V] = {
+    new Style[V](key, cssKey)
   }
 
   override def buildSetter[V](style: keys.Style[V], value: V): StyleSetter[V] = {

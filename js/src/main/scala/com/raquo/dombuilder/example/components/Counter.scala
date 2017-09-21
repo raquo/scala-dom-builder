@@ -1,6 +1,5 @@
 package com.raquo.dombuilder.example.components
 
-import com.raquo.dombuilder.jsdom.simple
 import com.raquo.dombuilder.jsdom.simple.implicits._
 import com.raquo.dombuilder.jsdom.simple.nodes.{SimpleElement, SimpleText}
 import com.raquo.dombuilder.jsdom.simple.tags.{button, div, h1}
@@ -11,7 +10,8 @@ class Counter { // This doesn't need to be a class, could be anything
 
   private var count = 0    // Declare this component's internal state
 
-  private val captionNode: SimpleText = simple.textNode(count.toString)    // Create node to represent the caption that shows the current count
+  private val captionNode: SimpleText = count.toString    // Create node to represent the caption that shows the current count
+                                                          // Uses implicit conversion simple.implicits.textNode
 
   private val incButton: SimpleElement[dom.html.Button] = button(    // Create a node to represent the "increment" button
     events.onClick := increment _,                  // Add event listener to the button node

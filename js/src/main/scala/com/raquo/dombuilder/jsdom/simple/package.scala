@@ -4,11 +4,12 @@ import com.raquo.dombuilder.generic.modifiers.{StringStyleSetter, StyleSetter}
 import com.raquo.dombuilder.generic.simple.SharedSimple
 import com.raquo.dombuilder.jsdom.builders.StyleBuilder
 import com.raquo.dombuilder.jsdom.nodes.ChildNode
-import com.raquo.dombuilder.jsdom.simple.builders.{SimpleEventBuilder, SimpleTag, SimpleTagBuilder}
+import com.raquo.dombuilder.jsdom.simple.builders.{SimpleTag, SimpleTagBuilder}
 import com.raquo.dombuilder.jsdom.simple.nodes.{SimpleElement, SimpleRoot, SimpleText}
 
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
 import com.raquo.domtypes.generic.keys.EventProp
+import com.raquo.domtypes.jsdom.builders.EventPropBuilder
 import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MouseEventProps}
 import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, TableTags, TextTags}
 
@@ -19,7 +20,12 @@ package object simple extends SharedSimple {
   type SimpleHtmlElement = SimpleElement[dom.html.Element]
 
   /** Import `implicits._` to get access to composition methods := and TagSyntax.apply */
-  object implicits extends syntax.Implicits {}
+  object implicits extends syntax.Implicits {
+
+    implicit def textToNode(text: String): SimpleText = {
+      new SimpleText(text)
+    }
+  }
 
   object events
     extends MouseEventProps[EventProp]
@@ -27,7 +33,7 @@ package object simple extends SharedSimple {
     with KeyboardEventProps[EventProp]
     with ClipboardEventProps[EventProp]
     with ErrorEventProps[EventProp]
-    with SimpleEventBuilder
+    with EventPropBuilder
 
   object tags
     extends DocumentTags[SimpleTag]
@@ -56,9 +62,5 @@ package object simple extends SharedSimple {
     child: SimpleRefNode with ChildNode[SimpleRefNode, dom.Element]
   ): SimpleRoot = {
     new SimpleRoot(container, child)
-  }
-
-  implicit def textNode(text: String): SimpleText = {
-    new SimpleText(text)
   }
 }

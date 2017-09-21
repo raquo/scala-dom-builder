@@ -7,5 +7,5 @@ import org.scalajs.dom
 /** See also: [[com.raquo.dombuilder.generic.syntax.Implicits]] */
 trait Implicits extends generic.syntax.Implicits {
 
-  implicit def eventPropSyntax[Ev <: dom.Event](eventProp: EventProp[Ev]): EventPropSyntax[Ev] = new EventPropSyntax(eventProp)
+  implicit def eventPropToSyntax[Ev <: dom.Event](eventProp: EventProp[Ev]): EventPropSyntax[Ev] = new EventPropSyntax(eventProp)
 }

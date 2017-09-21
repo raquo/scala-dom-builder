@@ -31,6 +31,7 @@ class Counter {    // This doesn't need to be a class, all you need is to build 
   private var count = 0    // Declare this component's internal state
  
   private val captionNode: SimpleText = count.toString    // Create node to represent the caption that shows the current count
+                                                          // Uses string-to-textnode implicit conversion that you need to import
  
   private val incButton: SimpleElement = button(    // Create a node to represent the "increment" button
     events.onClick := increment _,                  // Add event listener to the button node

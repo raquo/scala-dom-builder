@@ -1,6 +1,6 @@
 package com.raquo.dombuilder.generic.simple
 
-import com.raquo.domtypes.generic.builders.SpecializedBuilder
+import com.raquo.domtypes.generic.builders.{AttrBuilder, PropBuilder}
 import com.raquo.domtypes.generic.defs.attrs.{Attrs, GlobalAttrs, InputAttrs}
 import com.raquo.domtypes.generic.defs.props.{NodeProps, Props}
 import com.raquo.domtypes.generic.keys.{Attr, Prop}
@@ -11,17 +11,10 @@ trait SharedSimple {
     extends Attrs[Attr]
     with InputAttrs[Attr]
     with GlobalAttrs[Attr]
-    with SpecializedBuilder[Attr]
-  {
-    override def build[V](key: String): Attr[V] = new Attr(key)
-  }
+    with AttrBuilder
 
   object props
     extends Props[Prop]
     with NodeProps[Prop]
-    with SpecializedBuilder[Prop]
-  {
-    override def build[V](key: String): Prop[V] = new Prop(key)
-  }
-
+    with PropBuilder
 }

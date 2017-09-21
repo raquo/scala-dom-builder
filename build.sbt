@@ -51,7 +51,7 @@ lazy val dombuilder = crossProject.in(file("."))
   .settings(releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.1.3"
+      "com.raquo" %%% "domtypes" % "0.1.4-SNAPSHOT"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
@@ -63,7 +63,7 @@ lazy val dombuilder = crossProject.in(file("."))
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.9.3",
       "org.scalatest" %%% "scalatest" % "3.0.3" % Test,
-      "com.raquo" %%% "domtestutils" % "0.1" % Test
+      "com.raquo" %%% "domtestutils" % "0.1.1-SNAPSHOT" % Test
     )
   )
   .jvmSettings()

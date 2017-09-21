@@ -9,6 +9,6 @@ class StyleSetter[V](
 ) extends Modifier[Element] {
 
   override def applyTo(element: Element): Unit = {
-    element.setStyle(key.jsName, value)
+    element.setStyle(key.name, value)
   }
 }
