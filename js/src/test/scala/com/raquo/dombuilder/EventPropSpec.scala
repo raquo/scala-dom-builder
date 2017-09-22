@@ -54,7 +54,7 @@ class EventPropSpec extends UnitSpec {
     clickCount2 shouldBe 0
 
     // Add a new event listener on the same event type ("click")
-    clickSetter2.applyTo(clickableDiv)
+    clickSetter2(clickableDiv)
     clickableDiv.maybeEventListeners.get.length shouldBe 2
     clickCount1 shouldBe 1
     clickCount2 shouldBe 0
@@ -72,13 +72,13 @@ class EventPropSpec extends UnitSpec {
     clickCount2 shouldBe 1
 
     // Add a duplicate of the original event listener (duplicate should be ignored)
-    clickSetter1.applyTo(clickableDiv)
+    clickSetter1(clickableDiv)
     clickableDiv.maybeEventListeners.get.length shouldBe 1
     simulateClick(clickableDiv.ref)
     clickCount1 shouldBe 4
 
     // Add a listener to an unrelated event
-    scrollSetter2.applyTo(clickableDiv)
+    scrollSetter2(clickableDiv)
     clickableDiv.maybeEventListeners.get.length shouldBe 2
 
     simulateClick(clickableDiv.ref)

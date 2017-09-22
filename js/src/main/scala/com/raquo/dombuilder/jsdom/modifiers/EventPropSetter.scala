@@ -34,7 +34,7 @@ class EventPropSetter[Ev <: dom.Event](
     fromNode.ref.removeEventListener(key.domName, listener = domValue, useCapture)
   }
 
-  override def applyTo(node: generic.nodes.EventfulNode[_, dom.Node, dom.Node]): Unit = {
+  override def apply(node: generic.nodes.EventfulNode[_, dom.Node, dom.Node]): Unit = {
     node.addEventListener(this)
   }
 

@@ -7,7 +7,7 @@ class TagSyntax[N](val tag: Tag[N]) extends AnyVal {
 
   def apply(modifiers: Modifier[N]*): N = {
     val element = tag.build()
-    modifiers.foreach(_.applyTo(element))
+    modifiers.foreach(_(element))
     element
   }
 }

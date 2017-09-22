@@ -31,9 +31,9 @@ class Toggle(initialIsChecked: Boolean) {
   def setChecked(newIsChecked: Boolean, force: Boolean = false): Unit = {
     if (force || _isChecked != newIsChecked) {
       _isChecked = !_isChecked
-      (attrs.checked := newIsChecked).applyTo(inputNode)
+      (attrs.checked := newIsChecked).apply(inputNode)
       captionNode.setText(captionText)
-      (styles.color := color).applyTo(element)
+      (styles.color := color).apply(element)
     }
   }
 

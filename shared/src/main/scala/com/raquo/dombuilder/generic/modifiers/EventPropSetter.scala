@@ -21,7 +21,7 @@ trait EventPropSetter[Ev, BaseRef] extends Modifier[EventfulNode[_, BaseRef, Bas
     useCapture: Boolean = false
   ): Unit
 
-  override def applyTo(node: EventfulNode[_, BaseRef, BaseRef]): Unit = {
+  override def apply(node: EventfulNode[_, BaseRef, BaseRef]): Unit = {
     node.addEventListener(this)
   }
 

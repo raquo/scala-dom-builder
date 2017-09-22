@@ -8,7 +8,7 @@ class AttrSetter[V](
   val value: V
 ) extends Modifier[Element] {
 
-  override def applyTo(element: Element): Unit = {
-    element.setAttribute(key.name, value)
+  override def apply(element: Element): Unit = {
+    element.setAttribute(key, value)
   }
 }

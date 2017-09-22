@@ -6,7 +6,7 @@ trait ChildNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] with Modifier[
 
   private[this] var _maybeParent: Option[ParentNode[N, BaseRef, BaseRef]] = None
 
-  override def applyTo(node: ParentNode[N, BaseRef, BaseRef]): Unit = {
+  override def apply(node: ParentNode[N, BaseRef, BaseRef]): Unit = {
     node.appendChild(this)
   }
 

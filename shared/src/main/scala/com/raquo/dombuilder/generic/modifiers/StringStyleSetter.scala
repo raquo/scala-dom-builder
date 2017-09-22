@@ -8,7 +8,7 @@ class StringStyleSetter[V](
   val value: String
 ) extends Modifier[Element] {
 
-  override def applyTo(element: Element): Unit = {
-    element.setStyle(key.name, value)
+  override def apply(element: Element): Unit = {
+    element.setStringStyle(key, value)
   }
 }
