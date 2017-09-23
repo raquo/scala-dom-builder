@@ -10,7 +10,5 @@ trait SyntaxImplicits {
 
   implicit def tagToSyntax[N](tag: Tag[N]): TagSyntax[N] = new TagSyntax(tag)
 
-  implicit def attrToSyntax[V](attr: Attr[V]): AttrSyntax[V] = new AttrSyntax(attr)
-
   implicit def propToSyntax[Ev](prop: Prop[Ev]): PropSyntax[Ev] = new PropSyntax(prop)
 }
