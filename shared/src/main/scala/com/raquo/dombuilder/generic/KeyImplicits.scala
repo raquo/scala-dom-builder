@@ -1,7 +1,7 @@
 package com.raquo.dombuilder.generic
 
 import com.raquo.dombuilder.generic.nodes.Element
-import com.raquo.domtypes.generic.keys.{Attr, Style}
+import com.raquo.domtypes.generic.keys.{Attr, Prop, Style}
 import com.raquo.domtypes.generic.{Modifier, SetterBuilder}
 
 /** These implicits power [[com.raquo.dombuilder.generic.syntax.KeySyntax]],
@@ -10,6 +10,8 @@ import com.raquo.domtypes.generic.{Modifier, SetterBuilder}
 trait KeyImplicits {
 
   @inline implicit def defaultAttrSetterBuilder[V]: SetterBuilder[Attr[V], V, Modifier[Element]] = modifiers.buildAttrSetter
+
+  @inline implicit def defaultPropSetterBuilder[V]: SetterBuilder[Prop[V], V, Modifier[Element]] = modifiers.buildPropSetter
 
   @inline implicit def defaultStyleSetterBuilder[V]: SetterBuilder[Style[V], V, Modifier[Element]] = modifiers.buildStyleSetter
 

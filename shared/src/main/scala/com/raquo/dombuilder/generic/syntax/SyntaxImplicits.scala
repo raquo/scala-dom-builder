@@ -9,6 +9,4 @@ trait SyntaxImplicits {
   implicit def keyToSyntax[K <: Key](key: K): KeySyntax[K] = new KeySyntax(key)
 
   implicit def tagToSyntax[N](tag: Tag[N]): TagSyntax[N] = new TagSyntax(tag)
-
-  implicit def propToSyntax[Ev](prop: Prop[Ev]): PropSyntax[Ev] = new PropSyntax(prop)
 }
