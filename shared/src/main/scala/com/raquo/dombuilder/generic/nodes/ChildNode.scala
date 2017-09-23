@@ -1,6 +1,6 @@
 package com.raquo.dombuilder.generic.nodes
 
-import com.raquo.dombuilder.generic.modifiers.Modifier
+import com.raquo.domtypes.generic.Modifier
 
 trait ChildNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] with Modifier[ParentNode[N, BaseRef, BaseRef]] { this: N =>
 

@@ -1,6 +1,7 @@
 package com.raquo.dombuilder.generic.modifiers
 
 import com.raquo.dombuilder.generic.nodes.{EventfulNode, RefNode}
+import com.raquo.domtypes.generic.Modifier
 import com.raquo.domtypes.generic.keys.EventProp
 
 trait EventPropSetter[Ev, BaseRef] extends Modifier[EventfulNode[_, BaseRef, BaseRef]] {

@@ -1,11 +1,12 @@
 package com.raquo.dombuilder.jsdom
 
-import com.raquo.dombuilder.generic.modifiers.{StringStyleSetter, StyleSetter}
+import com.raquo.dombuilder.generic.KeyImplicits
+import com.raquo.dombuilder.generic.builders.StyleBuilder
 import com.raquo.dombuilder.generic.simple.SharedSimple
-import com.raquo.dombuilder.jsdom.builders.StyleBuilder
 import com.raquo.dombuilder.jsdom.nodes.ChildNode
 import com.raquo.dombuilder.jsdom.simple.builders.{SimpleCommentBuilder, SimpleTag, SimpleTagBuilder}
 import com.raquo.dombuilder.jsdom.simple.nodes.{SimpleComment, SimpleElement, SimpleRoot, SimpleText}
+import com.raquo.domtypes.generic.Modifier
 import com.raquo.domtypes.generic.builders.Builder
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
 import com.raquo.domtypes.generic.keys.EventProp
@@ -19,7 +20,7 @@ package object simple extends SharedSimple {
   type SimpleHtmlElement = SimpleElement[dom.html.Element]
 
   /** Import `implicits._` to get access to composition methods := and TagSyntax.apply */
-  object implicits extends syntax.Implicits {
+  object implicits extends KeyImplicits with syntax.SyntaxImplicits {
 
     implicit def textToNode(text: String): SimpleText = {
       new SimpleText(text)
@@ -49,11 +50,11 @@ package object simple extends SharedSimple {
     with SimpleTagBuilder
 
   object styles
-    extends Styles[StyleSetter, StringStyleSetter]
+    extends Styles[Modifier[SimpleHtmlElement]]
     with StyleBuilder
 
   object styles2
-    extends Styles2[StyleSetter, StringStyleSetter]
+    extends Styles2[Modifier[SimpleHtmlElement]]
     with StyleBuilder
 
   val comment: Builder[SimpleComment] = SimpleCommentBuilder
