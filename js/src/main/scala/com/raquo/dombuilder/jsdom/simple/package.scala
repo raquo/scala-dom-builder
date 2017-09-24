@@ -2,6 +2,7 @@ package com.raquo.dombuilder.jsdom
 
 import com.raquo.dombuilder.generic.KeyImplicits
 import com.raquo.dombuilder.generic.builders.StyleBuilder
+import com.raquo.dombuilder.generic.nodes.Element
 import com.raquo.dombuilder.generic.simple.SharedSimple
 import com.raquo.dombuilder.jsdom.nodes.ChildNode
 import com.raquo.dombuilder.jsdom.simple.builders.{SimpleCommentBuilder, SimpleTag, SimpleTagBuilder}
@@ -50,11 +51,11 @@ package object simple extends SharedSimple {
     with SimpleTagBuilder
 
   object styles
-    extends Styles[Modifier[SimpleHtmlElement]]
+    extends Styles[Modifier[Element]]
     with StyleBuilder
 
   object styles2
-    extends Styles2[Modifier[SimpleHtmlElement]]
+    extends Styles2[Modifier[Element]]
     with StyleBuilder
 
   val comment: Builder[SimpleComment] = SimpleCommentBuilder
