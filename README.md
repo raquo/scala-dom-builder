@@ -2,7 +2,7 @@
 
 _Scala DOM Builder_ is a low level, unopinionated library for building and manipulating DOM trees (objects representing HTML tags and their attributes, properties and styles).
 
-    "com.raquo" %%% "dombuilder" % "0.1"
+    "com.raquo" %%% "dombuilder" % "0.2"
 
 This library can be used in two ways: 1) directly for simple things, and 2) as a flexible foundation for a more opinionated UI library.
 
@@ -53,7 +53,7 @@ class Counter {    // This doesn't need to be a class, all you need is to build 
 }
 ```
 
-See `example/components` directory for more examples.
+See [`example`](https://github.com/raquo/scala-dom-builder/tree/master/js/src/main/scala/com/raquo/dombuilder/jsdom/simple/example) directory for more examples.
 
 This kind of design works great for small things, but if you're building rich, interactive web applications there's a better way – use (or make!) a higher level, more opinionated library on top of _Scala DOM Builder_. Read on for how to do that.
 
@@ -69,7 +69,7 @@ For an example on how to build your own library on top of _Scala DOM Builder_, c
 
 ## Server Side Rendering
 
-Even though Javascript DOM and the Scala.js interface to it are not available on the JVM, many _Scala DOM Builder_ components work just fine on the JVM, lacking only the Javascript-interfacing implementations. So you can certainly build JVM things on top of _Scala DOM Builder_, but it's kind of uncharted territory right now. I don't really know what people would want to use it on the JVM for, so ideas and suggestions in this regard are welcome.
+Even though Javascript DOM and the Scala.js interface to it are not available on the JVM, almost all _Scala DOM Builder_ components work just fine on the JVM if you implement a simple JS DOM API backend (see [domapi](https://github.com/raquo/scala-dom-builder/tree/master/shared/src/main/scala/com/raquo/dombuilder/generic/domapi) traits). So you can certainly build JVM things on top of _Scala DOM Builder_, but because the library is fairly new, this is uncharted territory right now.
 
 One thing that I definitely want to implement on the JVM is rendering to static HTML code, perhaps even extensible enough to support React-style DOM preloading.
 
@@ -88,4 +88,4 @@ Nikita Gazarov – [raquo.com](http://raquo.com)
 
 ## License
 
-_Scala DOM Builder_ is provided under the MIT license.
+_Scala DOM Builder_ is provided under the [MIT license](https://github.com/raquo/scala-dom-builder/blob/master/LICENSE.md).

@@ -1,31 +1,26 @@
 package com.raquo.dombuilder.generic.nodes
 
+import com.raquo.dombuilder.generic.domapi.TreeApi
+
 import scala.collection.mutable
 
-trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
+/** This trait represents a [[Node]] that can be a parent to other nodes.
+  *
+  * For example, [[Comment]] and [[Text]] are leaf nodes and can not be parent nodes.
+  */
+trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { this: N =>
 
-  protected[this] var _maybeChildren: Option[mutable.Buffer[N with ChildNode[N, BaseRef, BaseRef]]] = None
+  type BaseChildNode = N with ChildNode[N, BaseRef, BaseRef]
+  type BaseParentNode = N with ParentNode[N, BaseRef, BaseRef]
 
-  @inline def maybeChildren: Option[mutable.Buffer[N with ChildNode[N, BaseRef, BaseRef]]] = _maybeChildren
+  var _maybeChildren: Option[mutable.Buffer[BaseChildNode]] = None
 
-  def domAppendChild(child: N with ChildNode[N, BaseRef, BaseRef]): Boolean
-
-  def domRemoveChild(child: N with ChildNode[N, BaseRef, BaseRef]): Boolean
-
-  def domInsertBefore(
-    newChild: N with ChildNode[N, BaseRef, BaseRef],
-    referenceChild: N with ChildNode[N, BaseRef, BaseRef]
-  ): Boolean
-
-  def domReplaceChild(
-    newChild: N with ChildNode[N, BaseRef, BaseRef],
-    oldChild: N with ChildNode[N, BaseRef, BaseRef]
-  ): Boolean
+  @inline def maybeChildren: Option[mutable.Buffer[BaseChildNode]] = _maybeChildren
 
   /** @return Whether child was successfully appended */
-  def appendChild(child: N with ChildNode[N, BaseRef, BaseRef]): Boolean = {
+  def appendChild(child: BaseChildNode)(implicit treeApi: TreeApi[N, BaseRef]): Boolean = {
     // 1. Update DOM
-    val appended = domAppendChild(child)
+    val appended = treeApi.appendChild(parent = this, child = child)
     if (appended) {
 
       // 2. Update this node
@@ -42,7 +37,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
   }
 
   /** @return Whether child was successfully removed */
-  def removeChild(child: N with ChildNode[N, BaseRef, BaseRef]): Boolean = {
+  def removeChild(child: BaseChildNode)(implicit treeApi: TreeApi[N, BaseRef]): Boolean = {
     var removed = false
     _maybeChildren.foreach { children =>
 
@@ -51,7 +46,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
       if (indexOfChild != -1) {
 
         // 1. Update DOM
-        removed = domRemoveChild(child)
+        removed = treeApi.removeChild(parent = this, child = child)
         if (removed) {
 
           // 2. Update this node
@@ -66,7 +61,12 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
   }
 
   /** @return Whether child was successfully inserted */
-  def insertChild(child: N with ChildNode[N, BaseRef, BaseRef], atIndex: Int): Boolean = {
+  def insertChild(
+    child: BaseChildNode,
+    atIndex: Int
+  )(
+    implicit treeApi: TreeApi[N, BaseRef]
+  ): Boolean = {
     var inserted = false
 
     // 0. Prep this node
@@ -78,12 +78,13 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
       // 1. Update DOM
       if (atIndex < children.length) {
         val nextChild = children.apply(atIndex)
-        inserted = domInsertBefore(
+        inserted = treeApi.insertBefore(
+          parent = this,
           newChild = child,
           referenceChild = nextChild
         )
       } else if (atIndex == children.length) {
-        inserted = domAppendChild(child)
+        inserted = treeApi.appendChild(parent = this, child = child)
       }
 
       if (inserted) {
@@ -102,8 +103,10 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
     * @return Whether child was replaced
     */
   def replaceChild(
-    oldChild: N with ChildNode[N, BaseRef, BaseRef],
-    newChild: N with ChildNode[N, BaseRef, BaseRef]
+    oldChild: BaseChildNode,
+    newChild: BaseChildNode
+  )(
+    implicit treeApi: TreeApi[N, BaseRef]
   ): Boolean = {
     var replaced = false
     _maybeChildren.foreach { children =>
@@ -113,7 +116,8 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
       if (indexOfChild != -1) {
 
         // 1. Update DOM
-        replaced = domReplaceChild(
+        replaced = treeApi.replaceChild(
+          parent = this,
           newChild = newChild,
           oldChild = oldChild
         )
@@ -137,7 +141,9 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
   def replaceChildren(
     fromIndex: Int,
     toIndex: Int,
-    newChildren: Iterable[N with ChildNode[N, BaseRef, BaseRef]]
+    newChildren: Iterable[BaseChildNode]
+  )(
+    implicit treeApi: TreeApi[N, BaseRef]
   ): Boolean = {
     // A note on efficiency of this method:
     //
@@ -197,7 +203,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
     replaced
   }
 
-  def replaceAllChildren(newChildren: Iterable[N with ChildNode[N, BaseRef, BaseRef]]): Unit = {
+  def replaceAllChildren(newChildren: Iterable[BaseChildNode])(implicit treeApi: TreeApi[N, BaseRef]): Unit = {
     // @TODO[Performance] This could be optimized
     // @TODO[Integrity] This does not properly report failures like other methods do
 
@@ -210,7 +216,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
     newChildren.foreach(appendChild)
   }
 
-  def indexOfChild(child: N with ChildNode[N, BaseRef, BaseRef]): Int = {
+  def indexOfChild(child: BaseChildNode): Int = {
     _maybeChildren.map(children => children.indexOf(child)).getOrElse(-1)
   }
 }

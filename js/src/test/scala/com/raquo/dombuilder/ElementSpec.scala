@@ -1,8 +1,7 @@
 package com.raquo.dombuilder
 
-import com.raquo.dombuilder.jsdom.simple.comment
+import com.raquo.dombuilder.jsdom.simple.builders.{comment, commentNode}
 import com.raquo.dombuilder.jsdom.simple.implicits._
-import com.raquo.dombuilder.jsdom.simple.nodes.SimpleComment
 import com.raquo.dombuilder.jsdom.simple.tags.{div, hr, p, span}
 import com.raquo.dombuilder.jsdom.simple.tags2.article
 
@@ -31,8 +30,8 @@ class ElementSpec extends UnitSpec {
   }
 
   it("renders a comment") {
-    mount(div(new SimpleComment("yolo")))
-    expectNode(div like (comment like "yolo"))
+    mount(div(comment("yolo")), "")
+    expectNode(div like (commentNode like "yolo"))
     unmount()
   }
 

@@ -1,22 +1,31 @@
 package com.raquo.dombuilder.generic.nodes
 
+import com.raquo.dombuilder.generic.domapi.TreeApi
 import com.raquo.domtypes.generic.Modifier
 
-trait ChildNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] with Modifier[ParentNode[N, BaseRef, BaseRef]] { this: N =>
+/** This trait represents a [[Node]] that can have a parent. All nodes except [[Root]] extend this trait. */
+trait ChildNode[N, +Ref <: BaseRef, BaseRef]
+  extends Node[N, Ref, BaseRef]
+  with Modifier[N with ParentNode[N, BaseRef, BaseRef]]
+{ this: N =>
 
-  private[this] var _maybeParent: Option[ParentNode[N, BaseRef, BaseRef]] = None
+  val treeApi: TreeApi[N, BaseRef]
 
-  override def apply(node: ParentNode[N, BaseRef, BaseRef]): Unit = {
-    node.appendChild(this)
-  }
+  private type BaseParentNode = N with ParentNode[N, BaseRef, BaseRef]
 
-  def maybeParent: Option[ParentNode[N, BaseRef, BaseRef]] = _maybeParent
+  var _maybeParent: Option[BaseParentNode] = None
 
-  def setParent(newParent: ParentNode[N, BaseRef, BaseRef]): Unit = {
+  def maybeParent: Option[BaseParentNode] = _maybeParent
+
+  def setParent(newParent: BaseParentNode): Unit = {
     _maybeParent = Some(newParent)
   }
 
   def clearParent(): Unit = {
     _maybeParent = None
+  }
+
+  override def apply(parentNode: BaseParentNode): Unit = {
+    parentNode.appendChild(this)(treeApi)
   }
 }

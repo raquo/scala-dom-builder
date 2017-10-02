@@ -1,19 +1,21 @@
 package com.raquo.dombuilder.generic
 
-import com.raquo.dombuilder.generic.nodes.Element
+import com.raquo.dombuilder.generic.builders.SetterBuilders
+import com.raquo.dombuilder.generic.modifiers.Setter
 import com.raquo.domtypes.generic.keys.{Attr, Prop, Style}
-import com.raquo.domtypes.generic.{Modifier, SetterBuilder}
 
 /** These implicits power [[com.raquo.dombuilder.generic.syntax.KeySyntax]],
   * allowing you to use the `key := value` syntax
   */
-trait KeyImplicits {
+trait KeyImplicits[N, BaseElementRef <: BaseRef, BaseRef] { this: SetterBuilders[N, BaseElementRef, BaseRef] =>
 
-  @inline implicit def defaultAttrSetterBuilder[V]: SetterBuilder[Attr[V], V, Modifier[Element]] = modifiers.buildAttrSetter
+  @inline implicit def defaultAttrSetterBuilder[V]: (Attr[V], V) => Setter[Attr[V], V, BaseElement] = buildAttrSetter
 
-  @inline implicit def defaultPropSetterBuilder[V]: SetterBuilder[Prop[V], V, Modifier[Element]] = modifiers.buildPropSetter
+  @inline implicit def defaultPropSetterBuilder[V]: (Prop[V], V) => Setter[Prop[V], V, BaseElement] = buildPropSetter
 
-  @inline implicit def defaultStyleSetterBuilder[V]: SetterBuilder[Style[V], V, Modifier[Element]] = modifiers.buildStyleSetter
+  implicit val defaultIntStyleSetterBuilder: (Style[Int], Int) => Setter[Style[Int], Int, BaseElement] = buildIntStyleSetter
 
-  implicit val defaultStringStyleSetterBuilder: SetterBuilder[Style[_], String, Modifier[Element]] = modifiers.buildStringStyleSetter
+  implicit val defaultDoubleStyleSetterBuilder: (Style[Double], Double) => Setter[Style[Double], Double, BaseElement] = buildDoubleStyleSetter
+
+  implicit val defaultStringStyleSetterBuilder: (Style[_], String) => Setter[Style[_], String, BaseElement] = buildStringStyleSetter
 }

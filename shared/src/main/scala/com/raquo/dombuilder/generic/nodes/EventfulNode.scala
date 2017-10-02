@@ -1,22 +1,29 @@
 package com.raquo.dombuilder.generic.nodes
 
+import com.raquo.dombuilder.generic.domapi.EventApi
 import com.raquo.dombuilder.generic.modifiers.EventPropSetter
 
 import scala.collection.mutable
 
-// @TODO[Types] Doesn't seem like we need N type param here
+/** This trait represents a [[Node]] that fires events that you can listen for.
+  *
+  * This is separate from [[Element]] partially because you might not be able
+  * to listen for any events in the JVM environment.
+  * */
+trait EventfulNode[N, +Ref <: BaseElementRef, BaseElementRef <: BaseRef, BaseRef, BaseEvent, Callback[-_]] extends Element[N, Ref, BaseRef] { this: N =>
 
-/** Represents a [[RefNode]] that supports event listeners */
-trait EventfulNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =>
+  type BaseCallback = Callback[BaseEvent]
+  type BaseEventPropSetter = _EventPropSetter[_]
+  private type _EventPropSetter[Ev <: BaseEvent] = EventPropSetter[N, BaseElementRef, BaseRef, Ev, BaseEvent, Callback]
+  private type _EventApi = EventApi[N, BaseElementRef, BaseRef, BaseEvent, Callback]
 
   // @TODO[Naming] We reuse EventPropSetter to represent an active event listener. Makes for a bit confusing naming.
-  // @TODO[API] That is also a problem because it does not allow us to differentiate between useCapture true and false
-  protected[this] var _maybeEventListeners: Option[mutable.Buffer[EventPropSetter[_, BaseRef]]] = None
+  protected[this] var _maybeEventListeners: Option[mutable.Buffer[BaseEventPropSetter]] = None
 
-  @inline def maybeEventListeners: Option[mutable.Buffer[EventPropSetter[_, BaseRef]]] = _maybeEventListeners
+  @inline def maybeEventListeners: Option[mutable.Buffer[BaseEventPropSetter]] = _maybeEventListeners
 
   /** @return Whether listener was added (false if such a listener has already been present) */
-  def addEventListener[Ev](eventPropSetter: EventPropSetter[Ev, BaseRef]): Boolean = {
+  def addEventListener[Ev <: BaseEvent](eventPropSetter: _EventPropSetter[Ev])(implicit eventApi: _EventApi): Boolean = {
     val shouldAddListener = indexOfEventListener(eventPropSetter) == -1
     if (shouldAddListener) {
       // 1. Update this node
@@ -28,24 +35,24 @@ trait EventfulNode[N, +Ref <: BaseRef, BaseRef] extends RefNode[Ref] { this: N =
         }
       }
       // 2. Update the DOM
-      eventPropSetter.domAddEventListener(toNode = this)
+      eventApi.addEventListener(this, eventPropSetter)
     }
     shouldAddListener
   }
 
-  def removeEventListener[Ev](eventPropSetter: EventPropSetter[Ev, BaseRef]): Boolean = {
+  def removeEventListener[Ev <: BaseEvent](eventPropSetter: _EventPropSetter[Ev])(implicit eventApi: _EventApi): Boolean = {
     val index = indexOfEventListener(eventPropSetter)
     val shouldRemoveListener = index != -1
     if (shouldRemoveListener) {
       // 1. Update this node
       _maybeEventListeners.foreach(eventListeners => eventListeners.remove(index))
       // 2. Update the DOM
-      eventPropSetter.domRemoveEventListener(fromNode = this)
+      eventApi.removeEventListener(this, eventPropSetter)
     }
     shouldRemoveListener
   }
 
-  def indexOfEventListener[Ev](eventPropSetter: EventPropSetter[Ev, BaseRef]): Int = {
+  def indexOfEventListener[Ev <: BaseEvent](eventPropSetter: _EventPropSetter[Ev]): Int = {
     // Note: Ugly for performance.
     //  - We want to reduce usage of Scala's collections and anonymous functions
     //  - js.Array is unaware of Scala's `equals` method

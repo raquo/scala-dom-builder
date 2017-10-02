@@ -3,11 +3,12 @@ package com.raquo.dombuilder.generic.syntax
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.domtypes.generic.builders.Tag
 
-class TagSyntax[N](val tag: Tag[N]) extends AnyVal {
+/** This class is created implicitly to provide `tag(...modifiers)` syntax */
+class TagSyntax[Element](val tag: Tag[Element]) extends AnyVal {
 
-  def apply(modifiers: Modifier[N]*): N = {
+  def apply(modifiers: Modifier[Element]*): Element = {
     val element = tag.build()
-    modifiers.foreach(_(element))
+    modifiers.foreach(modifier => modifier(element))
     element
   }
 }

@@ -1,14 +1,15 @@
 package com.raquo.dombuilder.generic.nodes
 
+import com.raquo.dombuilder.generic.domapi.CommentApi
 import com.raquo.domtypes
 
-trait Comment extends domtypes.generic.nodes.Comment {
+trait Comment[N, CommentRef <: BaseRef, BaseRef]
+  extends Node[N, CommentRef, BaseRef]
+  with domtypes.generic.nodes.Comment { this: N =>
 
-  protected[this] var _text: String
+  // @TODO do we even need these methods here? They don't contain any special logic. Just for convenience?
 
-  setText(_text)
-
-  @inline override def text: String = _text
-
-  def setText(newText: String): Unit
+  @inline def setText(text: String)(implicit commentApi: CommentApi[N, CommentRef, BaseRef]): Unit = {
+    commentApi.setText(this, text)
+  }
 }

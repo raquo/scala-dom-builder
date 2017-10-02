@@ -42,6 +42,7 @@ val releaseSettings: Seq[Setting[_]] = Seq(
 
 lazy val root = project.in(file("."))
   .aggregate(js, jvm)
+  .settings(releaseSettings)
   .settings(
     publish := {},
     publishLocal := {}
@@ -51,11 +52,12 @@ lazy val dombuilder = crossProject.in(file("."))
   .settings(releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.1.4-SNAPSHOT"
+      "com.raquo" %%% "domtypes" % "0.2.1"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
   .jsSettings(
+    scalaJSUseMainModuleInitializer := true,
     requiresDOM in Test := true,
     useYarn := true,
     emitSourceMaps in fastOptJS := false,
@@ -63,7 +65,7 @@ lazy val dombuilder = crossProject.in(file("."))
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.9.3",
       "org.scalatest" %%% "scalatest" % "3.0.3" % Test,
-      "com.raquo" %%% "domtestutils" % "0.2-SNAPSHOT" % Test
+      "com.raquo" %%% "domtestutils" % "0.2" % Test
     )
   )
   .jvmSettings()

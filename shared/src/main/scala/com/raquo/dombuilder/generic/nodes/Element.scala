@@ -1,17 +1,11 @@
 package com.raquo.dombuilder.generic.nodes
 
 import com.raquo.domtypes
-import com.raquo.domtypes.generic.keys.{Attr, Prop, Style}
 
-trait Element extends domtypes.generic.nodes.Element {
+/** This trait represents a DOM Element (as opposed to a Comment node or a Text node) */
+trait Element[N, +Ref <: BaseRef, BaseRef]
+  extends domtypes.generic.nodes.Element
+  with Node[N, Ref, BaseRef]
+{ this: N =>
 
-  def setAttribute[V](attr: Attr[V], value: V): Unit
-
-  def removeAttribute(attr: Attr[_]): Unit
-
-  def setProperty[V](prop: Prop[V], value: V): Unit
-
-  def setStyle[V](style: Style[V], value: V): Unit
-
-  def setStringStyle(style: Style[_], value: String): Unit
 }
