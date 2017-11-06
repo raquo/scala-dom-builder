@@ -1,10 +1,7 @@
 package com.raquo.dombuilder
 
-import com.raquo.dombuilder.jsdom.simple.attrs.cls
-import com.raquo.dombuilder.jsdom.simple.events.{onClick, onScroll}
-import com.raquo.dombuilder.jsdom.simple.implicits._
 import com.raquo.dombuilder.jsdom.simple.SimpleText
-import com.raquo.dombuilder.jsdom.simple.tags.{div, span}
+import com.raquo.dombuilder.jsdom.simple.bundle._
 
 class EventPropSpec extends UnitSpec {
 
@@ -30,7 +27,7 @@ class EventPropSpec extends UnitSpec {
     val scrollSetter2 = onScroll := testScroll _
 
     val clickableDiv = div(
-      cls := "clickable",
+      className := "clickable",
       clickSetter1,
       "world"
     )
@@ -38,7 +35,7 @@ class EventPropSpec extends UnitSpec {
     mount(
       div(
         clickableDiv,
-        div(cls := "unrelated", "Something else")
+        div(className := "unrelated", "Something else")
       )
     )
 
@@ -114,13 +111,13 @@ class EventPropSpec extends UnitSpec {
     val childTextNode: SimpleText = "world"
 
     val clickableDiv = div(
-      cls := "clickable",
+      className := "clickable",
       onClick := testEvent _,
       childSpan,
       childTextNode
     )
 
-    val unrelatedDiv = div(cls := "unrelated", "Something else")
+    val unrelatedDiv = div(className := "unrelated", "Something else")
 
     mount(
       div(

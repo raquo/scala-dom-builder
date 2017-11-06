@@ -7,6 +7,8 @@ import org.scalajs.dom
 
 import scala.scalajs.js
 
+// @TODO[API] Extract Dom API into a separate Scala DOM API package. Eventually.
+
 trait JsElementApi[N] extends ElementApi[N, dom.Element, dom.Node] {
 
   override def createNode[Ref <: dom.Element](element: N with Element[N, Ref, dom.Node]): Ref = {
@@ -14,10 +16,11 @@ trait JsElementApi[N] extends ElementApi[N, dom.Element, dom.Node] {
   }
 
   override def setAttribute[V](element: BaseElement, attr: Attr[V], value: V): Unit = {
-    value match {
-      case true => element.ref.setAttribute(attr.name, "")
-      case false => removeAttribute(element, attr)
-      case _ => element.ref.setAttribute(attr.name, value.toString)
+    val domValue = attr.codec.encode(value)
+    if (domValue == null) { // End users should use `removeAttribute` instead. This is to support boolean attributes.
+      removeAttribute(element, attr)
+    } else {
+      element.ref.setAttribute(attr.name, domValue.toString)
     }
   }
 
@@ -25,8 +28,9 @@ trait JsElementApi[N] extends ElementApi[N, dom.Element, dom.Node] {
     element.ref.removeAttribute(attr.name)
   }
 
-  override def setProperty[V](element: BaseElement, prop: Prop[V], value: V): Unit = {
-    element.ref.asInstanceOf[js.Dynamic].updateDynamic(prop.name)(value.asInstanceOf[js.Any])
+  override def setProperty[V, DomV](element: BaseElement, prop: Prop[V, DomV], value: V): Unit = {
+    val newValue = prop.codec.encode(value).asInstanceOf[js.Any]
+    element.ref.asInstanceOf[js.Dynamic].updateDynamic(prop.name)(newValue)
   }
 
   override def setStyle[V](element: BaseElement, style: Style[V], value: V): Unit = {

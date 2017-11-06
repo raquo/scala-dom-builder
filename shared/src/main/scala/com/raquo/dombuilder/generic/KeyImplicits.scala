@@ -11,7 +11,7 @@ trait KeyImplicits[N, BaseElementRef <: BaseRef, BaseRef] { this: SetterBuilders
 
   @inline implicit def defaultAttrSetterBuilder[V]: (Attr[V], V) => Setter[Attr[V], V, BaseElement] = buildAttrSetter
 
-  @inline implicit def defaultPropSetterBuilder[V]: (Prop[V], V) => Setter[Prop[V], V, BaseElement] = buildPropSetter
+  @inline implicit def defaultPropSetterBuilder[V, DomV]: (Prop[V, DomV], V) => Setter[Prop[V, DomV], V, BaseElement] = buildPropSetter
 
   implicit val defaultIntStyleSetterBuilder: (Style[Int], Int) => Setter[Style[Int], Int, BaseElement] = buildIntStyleSetter
 

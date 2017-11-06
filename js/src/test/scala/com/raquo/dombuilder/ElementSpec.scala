@@ -1,9 +1,7 @@
 package com.raquo.dombuilder
 
 import com.raquo.dombuilder.jsdom.simple.builders.{comment, commentNode}
-import com.raquo.dombuilder.jsdom.simple.implicits._
-import com.raquo.dombuilder.jsdom.simple.tags.{div, hr, p, span}
-import com.raquo.dombuilder.jsdom.simple.tags2.article
+import com.raquo.dombuilder.jsdom.simple.bundle._
 
 class ElementSpec extends UnitSpec {
 

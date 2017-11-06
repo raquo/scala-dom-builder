@@ -1,7 +1,7 @@
 package com.raquo.dombuilder
 
+import com.raquo.dombuilder.jsdom.simple.bundle.div
 import com.raquo.dombuilder.jsdom.simple.implicits._
-import com.raquo.dombuilder.jsdom.simple.tags.div
 
 class RefSpec extends UnitSpec {
 

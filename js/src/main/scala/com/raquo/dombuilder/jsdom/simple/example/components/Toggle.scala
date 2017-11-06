@@ -1,28 +1,22 @@
 package com.raquo.dombuilder.jsdom.simple.example.components
 
-import com.raquo.dombuilder.generic.modifiers.Setter
-import com.raquo.dombuilder.generic.nodes.Element
-import com.raquo.dombuilder.jsdom.nodes.JsElement
+import com.raquo.dombuilder.jsdom.simple.bundle.{checked, className, div, input, onChange, typ, color}
 import com.raquo.dombuilder.jsdom.simple.implicits._
-import com.raquo.dombuilder.jsdom.simple.tags.{div, input}
-import com.raquo.dombuilder.jsdom.simple.{SimpleHtmlElement, SimpleN, SimpleText, attrs, events, styles}
-import com.raquo.domtypes.generic.Modifier
-import com.raquo.domtypes.generic.keys.Style
-import org.scalajs.dom
+import com.raquo.dombuilder.jsdom.simple.{SimpleHtmlElement, SimpleText}
 
 class Toggle(initialIsChecked: Boolean) {
 
   private var _isChecked = false
 
   private val inputNode = input(
-    attrs.typ := "checkbox",
-    events.onChange := (() => setChecked(!_isChecked))
+    typ := "checkbox",
+    onChange := (() => setChecked(!_isChecked))
   )
 
   private val captionNode: SimpleText = captionText
 
   val element: SimpleHtmlElement = div(
-    attrs.cls := "Toggle",
+    className := "Toggle",
     div(
       inputNode,
       captionNode
@@ -36,13 +30,13 @@ class Toggle(initialIsChecked: Boolean) {
   def setChecked(newIsChecked: Boolean, force: Boolean = false): Unit = {
     if (force || _isChecked != newIsChecked) {
       _isChecked = !_isChecked
-      (attrs.checked := newIsChecked).apply(inputNode)
+      (checked := newIsChecked).apply(inputNode)
       captionNode.setText(captionText)
-      (styles.color := color).apply(element)
+      (color := captionColor).apply(element)
     }
   }
 
-  def color: String = {
+  def captionColor: String = {
     if (_isChecked) "green" else "red"
   }
 

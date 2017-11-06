@@ -2,7 +2,7 @@
 
 _Scala DOM Builder_ is a low level, unopinionated library for building and manipulating DOM trees (objects representing HTML tags and their attributes, properties and styles).
 
-    "com.raquo" %%% "dombuilder" % "0.2"
+    "com.raquo" %%% "dombuilder" % "0.3"
 
 This library can be used in two ways: 1) directly for simple things, and 2) as a flexible foundation for a more opinionated UI library.
 
@@ -34,13 +34,13 @@ class Counter {    // This doesn't need to be a class, all you need is to build 
                                                           // Uses string-to-textnode implicit conversion that you need to import
  
   private val incButton: SimpleElement = button(    // Create a node to represent the "increment" button
-    events.onClick := increment _,                  // Add event listener to the button node
+    onClick := increment _,                         // Add event listener to the button node
     "[ + ]"                                         // Add a child node (which happens to be a text node) to the button node
   )
   
   val element: SimpleElement = div(    // Create a node that will be either mounted as a root node or added as a child to another node.
-    attrs.cls := "CounterClassBlah",   // Add a CSS class name to this node (not used here, just an example)
-    styles.display.inlineBlock,        // Set CSS display property to "inline-block" (just because)
+    className := "CounterClassBlah",   // Add a CSS class name to this node (not used here, just an example)
+    display.inlineBlock,               // Set CSS display property to "inline-block" (just because)
     h1("Counter"),                     // Create an h1 HTML node and add it as a child
     incButton,                         // Add the "increment" button as a child node
     captionNode                        // Add the caption as a child node

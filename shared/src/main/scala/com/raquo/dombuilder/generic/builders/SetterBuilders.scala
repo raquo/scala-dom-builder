@@ -21,7 +21,7 @@ trait SetterBuilders[N, BaseElementRef <: BaseRef, BaseRef]
     new Setter(key, value, elementApi.setAttribute)
   }
 
-  @inline def buildPropSetter[V](key: Prop[V], value: V): Setter[Prop[V], V, BaseElement] = {
+  @inline def buildPropSetter[V, DomV](key: Prop[V, DomV], value: V): Setter[Prop[V, DomV], V, BaseElement] = {
     new Setter(key, value, elementApi.setProperty)
   }
 

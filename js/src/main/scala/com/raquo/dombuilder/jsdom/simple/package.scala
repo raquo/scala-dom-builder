@@ -6,13 +6,13 @@ import com.raquo.dombuilder.generic.nodes.{ChildNode, Element}
 import com.raquo.dombuilder.generic.syntax.{EventPropSyntax, SyntaxImplicits}
 import com.raquo.dombuilder.jsdom.nodes.{JsComment, JsElement, JsRoot, JsText}
 import com.raquo.domtypes.generic.Modifier
-import com.raquo.domtypes.generic.builders.{AttrBuilder, PropBuilder}
-import com.raquo.domtypes.generic.defs.attrs.{Attrs, GlobalAttrs, InputAttrs}
-import com.raquo.domtypes.generic.defs.props.{NodeProps, Props}
+import com.raquo.domtypes.generic.builders.canonical.{CanonicalAttrBuilder, CanonicalEventPropBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder}
+import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, Attrs}
+import com.raquo.domtypes.generic.defs.props.Props
+import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedAttrs
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
 import com.raquo.domtypes.generic.keys.{Attr, EventProp, Prop}
-import com.raquo.domtypes.jsdom.builders.EventPropBuilder
-import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MouseEventProps}
+import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MediaEventProps, MiscellaneousEventProps, MouseEventProps, WindowEventProps}
 import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, TableTags, TextTags}
 import org.scalajs.dom
 
@@ -24,50 +24,48 @@ package object simple {
   type SimpleText = SimpleN with JsText[SimpleN]
   type SimpleComment = SimpleN with JsComment[SimpleN]
 
-  // @TODO can the bundles below be genericized outside of the simple package, with only some implicits as inputs?
+  type SimpleStyleSetter = Modifier[SimpleN with Element[SimpleN, dom.Element, dom.Node]]
 
-  object attrs
+  type ReflectedAttr[V, DomV] = Attr[V]
+
+  object bundle
+    // Attrs
     extends Attrs[Attr]
-      with InputAttrs[Attr]
-      with GlobalAttrs[Attr]
-      with AttrBuilder
-
-  object props
-    extends Props[Prop]
-      with NodeProps[Prop]
-      with PropBuilder
-
-  object events
-    extends MouseEventProps[EventProp]
-    with FormEventProps[EventProp]
-    with KeyboardEventProps[EventProp]
+    with AriaAttrs[Attr]
+    // Event Props
     with ClipboardEventProps[EventProp]
     with ErrorEventProps[EventProp]
-    with EventPropBuilder
-
-  object tags
-    extends DocumentTags[SimpleTag]
-    with GroupingTags[SimpleTag]
-    with TextTags[SimpleTag]
-    with FormTags[SimpleTag]
-    with SectionTags[SimpleTag]
+    with FormEventProps[EventProp]
+    with KeyboardEventProps[EventProp]
+    with MediaEventProps[EventProp]
+    with MiscellaneousEventProps[EventProp]
+    with MouseEventProps[EventProp]
+    with WindowEventProps[EventProp]
+    // Props
+    with Props[Prop]
+    // Reflected Attrs
+    with ReflectedAttrs[ReflectedAttr]
+    // Styles
+    with Styles[SimpleStyleSetter]
+    with Styles2[SimpleStyleSetter]
+    // Tags
+    with DocumentTags[SimpleTag]
     with EmbedTags[SimpleTag]
+    with FormTags[SimpleTag]
+    with GroupingTags[SimpleTag]
+    with MiscTags[SimpleTag]
+    with SectionTags[SimpleTag]
     with TableTags[SimpleTag]
+    with TextTags[SimpleTag]
+    // Builders
+    with CanonicalAttrBuilder
+    with CanonicalReflectedAttrBuilder
+    with CanonicalEventPropBuilder[dom.Event]
+    with CanonicalPropBuilder
     with SimpleTagBuilder
-
-  object tags2
-    extends MiscTags[SimpleTag]
-    with SimpleTagBuilder
-
-  object styles
-    extends Styles[Modifier[SimpleN with Element[SimpleN, dom.Element, dom.Node]]]
     with SetterBuilders[SimpleN, dom.Element, dom.Node]
-    with SimpleDomApi
-
-  object styles2
-    extends Styles2[Modifier[SimpleN with Element[SimpleN, dom.Element, dom.Node]]]
-    with SetterBuilders[SimpleN, dom.Element, dom.Node]
-    with SimpleDomApi
+    // Other
+    with SimpleImplicits
 
   def mount(
     container: dom.Element,
@@ -76,26 +74,10 @@ package object simple {
     new JsRoot[SimpleN](container, child, SimpleDomApi.treeApi) with SimpleN
   }
 
-  /** Import `implicits._` to get access to composition methods like `key := value` and `tag(modifiers)` */
+  /** Import `implicits._` if you don't want to import `bundle._` */
   object implicits
-    extends KeyImplicits[SimpleN, dom.Element, dom.Node]
-    with SyntaxImplicits[SimpleN, dom.Element, dom.Node, dom.Event, JsCallback]
+    extends SimpleImplicits
     with SetterBuilders[SimpleN, dom.Element, dom.Node]
-    with SimpleDomApi {
-
-    implicit def eventPropToSyntax[Ev <: dom.Event](
-      eventProp: EventProp[Ev]
-    ): EventPropSyntax[SimpleN, dom.Element, dom.Node, Ev, dom.Event, JsCallback] = {
-      // @TODO[IDE] IntelliJ 2017.2 needs explicit type params below to avoid erroring
-      new EventPropSyntax[SimpleN, dom.Element, dom.Node, Ev, dom.Event, JsCallback](eventProp)
-    }
-
-    implicit def stringToTextNode(text: String): JsText[SimpleN] with SimpleN = {
-      val newTextNode = builders.textNode()
-      newTextNode.setText(text)(SimpleDomApi.textApi)
-      newTextNode
-    }
-  }
 
   object builders {
 

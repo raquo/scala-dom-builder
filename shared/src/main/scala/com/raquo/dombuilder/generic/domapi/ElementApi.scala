@@ -13,7 +13,7 @@ trait ElementApi[N, BaseElementRef <: BaseRef, BaseRef] {
 
   def removeAttribute(element: BaseElement, attr: Attr[_]): Unit
 
-  def setProperty[V](element: BaseElement, prop: Prop[V], value: V): Unit
+  def setProperty[V, DomV](element: BaseElement, prop: Prop[V, DomV], value: V): Unit
 
   def setStyle[V](element: BaseElement, style: Style[V], value: V): Unit
 

@@ -23,7 +23,7 @@ trait SyntaxImplicits[N, BaseElementRef <: BaseRef, BaseRef, BaseEvent, Callback
     new KeySyntax(attr)
   }
 
-  implicit def propToKeySyntax[V](prop: Prop[V]): KeySyntax[Prop[V], Modifier[BaseElement]] = {
+  implicit def propToKeySyntax[V, DomV](prop: Prop[V, DomV]): KeySyntax[Prop[V, DomV], Modifier[BaseElement]] = {
     new KeySyntax(prop)
   }
 
