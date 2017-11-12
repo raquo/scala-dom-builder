@@ -70,7 +70,7 @@ package object simple {
   def mount(
     container: dom.Element,
     child: SimpleN with ChildNode[SimpleN, dom.Node, dom.Node]
-  ): JsRoot[SimpleN] = {
+  ): SimpleN with JsRoot[SimpleN] = {
     new JsRoot[SimpleN](container, child, SimpleDomApi.treeApi) with SimpleN
   }
 
