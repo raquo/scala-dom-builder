@@ -22,8 +22,6 @@ class TreeSpec extends UnitSpec {
 
     val elx = b("elx")
 
-    // @TODO[IDE] IntelliJ 2017.2.5 thinks isDescendantOf calls are incorrect
-
     el0.isDescendantOf(root) shouldBe true
     el0.isDescendantOf(el10) shouldBe false
     el10.isDescendantOf(root) shouldBe false
@@ -64,7 +62,7 @@ class TreeSpec extends UnitSpec {
     el3.isDescendantOf(otherRoot) shouldBe false
     el3.isDescendantOf(otherEl) shouldBe false
 
-    el3.setParent(elx)
+    el3.setParent(Some(elx))
 
     el3.isDescendantOf(elx) shouldBe true
     el3.isDescendantOf(root) shouldBe false
@@ -74,7 +72,7 @@ class TreeSpec extends UnitSpec {
     el3.isDescendantOf(otherRoot) shouldBe false
     el3.isDescendantOf(otherEl) shouldBe false
 
-    el3.setParent(el10)
+    el3.setParent(Some(el10))
 
     el3.isDescendantOf(root) shouldBe true
     el3.isDescendantOf(el0) shouldBe true
@@ -86,6 +84,6 @@ class TreeSpec extends UnitSpec {
     el3.isDescendantOf(otherEl) shouldBe false
   }
 
-  it("")
+//  it("")
 
 }

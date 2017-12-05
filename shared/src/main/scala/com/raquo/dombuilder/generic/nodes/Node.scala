@@ -18,6 +18,8 @@ trait Node[N, +Ref <: BaseRef, BaseRef] extends domtypes.generic.nodes.Node { th
   // @TODO[API] find a way to lock down internal API, maybe require a bogus implicit param that needs to be imported, or something
 
   type BaseElement = N with Element[N, BaseRef, BaseRef] // @TODO second param should be BaseElementRef, and this should not live here
+  type BaseParentNode = N with ParentNode[N, BaseRef, BaseRef]
+  type BaseChildNode = N with ChildNode[N, BaseRef, BaseRef]
   type BaseNode = N with Node[N, BaseRef, BaseRef]
 
   /** Reference to the real DOM node which this [[Node]] represents. */

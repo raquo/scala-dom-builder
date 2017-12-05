@@ -35,14 +35,6 @@ trait Root[N, +ParentRef <: BaseRef, BaseRef] extends ParentNode[N, ParentRef, B
 
   /** @return Whether child was successfully unmounted */
   def unmount()(implicit treeApi: TreeApi[N, BaseRef]): Boolean = {
-    var removed = false
-    val maybeParentNode = child.maybeParent
-    maybeParentNode.foreach { parentNode =>
-      removed = parentNode.removeChild(child)
-      if (removed) {
-        child.clearParent()
-      }
-    }
-    removed
+    this.removeChild(child)
   }
 }

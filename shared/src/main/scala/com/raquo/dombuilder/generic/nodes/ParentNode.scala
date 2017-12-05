@@ -10,10 +10,7 @@ import scala.collection.mutable
   */
 trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { this: N =>
 
-  type BaseChildNode = N with ChildNode[N, BaseRef, BaseRef]
-  type BaseParentNode = N with ParentNode[N, BaseRef, BaseRef]
-
-  var _maybeChildren: Option[mutable.Buffer[BaseChildNode]] = None
+  private var _maybeChildren: Option[mutable.Buffer[BaseChildNode]] = None
 
   @inline def maybeChildren: Option[mutable.Buffer[BaseChildNode]] = _maybeChildren
 
@@ -22,6 +19,8 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
     // 1. Update DOM
     val appended = treeApi.appendChild(parent = this, child = child)
     if (appended) {
+      val nextParent = Some(this)
+      child.willSetParent(nextParent)
 
       // 2. Update this node
       if (_maybeChildren.isEmpty) {
@@ -31,7 +30,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
       }
 
       // 3. Update child
-      child.setParent(this)
+      child.setParent(nextParent)
     }
     appended
   }
@@ -44,6 +43,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
       // 0. Check precondition required for consistency of our own Tree vs real DOM
       val indexOfChild = children.indexOf(child)
       if (indexOfChild != -1) {
+        child.willSetParent(None)
 
         // 1. Update DOM
         removed = treeApi.removeChild(parent = this, child = child)
@@ -53,7 +53,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
           children.remove(indexOfChild, count = 1)
 
           // 3. Update child
-          child.clearParent()
+          child.setParent(None)
         }
       }
     }
@@ -75,6 +75,9 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
     }
 
     _maybeChildren.foreach { children =>
+      val nextParent = Some(this)
+      child.willSetParent(nextParent)
+
       // 1. Update DOM
       if (atIndex < children.length) {
         val nextChild = children.apply(atIndex)
@@ -92,7 +95,7 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
         children.insert(atIndex, child)
 
         // 3. Update child
-        child.setParent(this)
+        child.setParent(nextParent)
       }
     }
     inserted
@@ -112,23 +115,27 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
     _maybeChildren.foreach { children =>
 
       // 0. Check precondition required for consistency of our own Tree vs real DOM
-      val indexOfChild = children.indexOf(oldChild)
-      if (indexOfChild != -1) {
+      if (oldChild != newChild) {
+        val indexOfChild = children.indexOf(oldChild)
+        if (indexOfChild != -1) {
+          val newChildNextParent = Some(this)
+          oldChild.willSetParent(None)
+          newChild.willSetParent(newChildNextParent)
 
-        // 1. Update DOM
-        replaced = treeApi.replaceChild(
-          parent = this,
-          newChild = newChild,
-          oldChild = oldChild
-        )
+          // 1. Update DOM
+          replaced = treeApi.replaceChild(
+            parent = this,
+            newChild = newChild,
+            oldChild = oldChild
+          )
 
-        // 2. Update this node
-        children.update(indexOfChild, newChild)
+          // 2. Update this node
+          children.update(indexOfChild, newChild)
 
-        // 3. Update children
-        // @TODO[Test] This order is important when oldChild==newChild. Add a test for it
-        oldChild.clearParent()
-        newChild.setParent(this)
+          // 3. Update children
+          oldChild.setParent(None)
+          newChild.setParent(newChildNextParent)
+        }
       }
     }
     replaced
