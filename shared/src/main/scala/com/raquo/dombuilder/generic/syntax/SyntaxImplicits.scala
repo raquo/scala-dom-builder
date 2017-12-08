@@ -17,8 +17,6 @@ trait SyntaxImplicits[N, BaseElementRef <: BaseRef, BaseRef, BaseEvent, Callback
 
   private type BaseElement = N with Element[N, BaseElementRef, BaseRef]
 
-  implicit def tagToSyntax[Element](tag: Tag[Element]): TagSyntax[Element] = new TagSyntax(tag)
-
   implicit def attrToKeySyntax[V](attr: Attr[V]): KeySyntax[Attr[V], Modifier[BaseElement]] = {
     new KeySyntax(attr)
   }
