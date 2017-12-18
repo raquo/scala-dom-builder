@@ -1,9 +1,7 @@
 package com.raquo.dombuilder.jsdom
 
-import com.raquo.dombuilder.generic.KeyImplicits
 import com.raquo.dombuilder.generic.builders.SetterBuilders
 import com.raquo.dombuilder.generic.nodes.{ChildNode, Element}
-import com.raquo.dombuilder.generic.syntax.{EventPropSyntax, SyntaxImplicits}
 import com.raquo.dombuilder.jsdom.nodes.{JsComment, JsElement, JsRoot, JsText}
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.domtypes.generic.builders.canonical.{CanonicalAttrBuilder, CanonicalEventPropBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder}
@@ -12,7 +10,7 @@ import com.raquo.domtypes.generic.defs.props.Props
 import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedAttrs
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
 import com.raquo.domtypes.generic.keys.{Attr, EventProp, Prop}
-import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MediaEventProps, MiscellaneousEventProps, MouseEventProps, WindowEventProps}
+import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MediaEventProps, MiscellaneousEventProps, MouseEventProps, WindowOnlyEventProps}
 import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, TableTags, TextTags}
 import org.scalajs.dom
 
@@ -40,7 +38,7 @@ package object simple {
     with MediaEventProps[EventProp]
     with MiscellaneousEventProps[EventProp]
     with MouseEventProps[EventProp]
-    with WindowEventProps[EventProp]
+    with WindowOnlyEventProps[EventProp]
     // Props
     with Props[Prop]
     // Reflected Attrs
