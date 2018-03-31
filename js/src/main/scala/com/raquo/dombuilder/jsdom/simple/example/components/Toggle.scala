@@ -31,7 +31,7 @@ class Toggle(initialIsChecked: Boolean) {
     if (force || _isChecked != newIsChecked) {
       _isChecked = !_isChecked
       (checked := newIsChecked).apply(inputNode)
-      captionNode.setText(captionText)
+      captionNode.ref.textContent = captionText
       (color := captionColor).apply(element)
     }
   }

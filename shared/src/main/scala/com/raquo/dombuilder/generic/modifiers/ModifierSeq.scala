@@ -6,7 +6,7 @@ class ModifierSeq[N](
   val modifiers: Iterable[Modifier[N]]
 ) extends Modifier[N] {
 
-  def apply(node: N): Unit = {
+  override def apply(node: N): Unit = {
     modifiers.foreach(_(node))
   }
 }

@@ -6,9 +6,7 @@ trait CommentApi[N, CommentRef <: BaseRef, BaseRef] {
 
   type CommentNode = N with Comment[N, CommentRef, BaseRef]
 
-  def createNode: CommentRef
-
-  def getText(node: CommentNode): String
+  def createNode(text: String): CommentRef
 
   def setText(node: CommentNode, text: String)
 }

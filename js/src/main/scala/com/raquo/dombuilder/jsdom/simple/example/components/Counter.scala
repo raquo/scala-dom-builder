@@ -25,8 +25,8 @@ class Counter { // This doesn't need to be a class, could be anything
     captionNode                        // Add the caption as a child node
   )
 
-  def increment(): Unit = {                // Callback that will fire on every button click
-    count += 1                             // Update internal component state
-    captionNode.setText(count.toString)    // Update the DOM
+  def increment(): Unit = {                         // Callback that will fire on every button click
+    count += 1                                      // Update internal component state
+    captionNode.ref.textContent = count.toString    // Update the DOM
   }
 }

@@ -12,7 +12,7 @@ import scala.scalajs.js
 trait JsElementApi[N] extends ElementApi[N, dom.Element, dom.Node] {
 
   override def createNode[Ref <: dom.Element](element: N with Element[N, Ref, dom.Node]): Ref = {
-    dom.document.createElement(element.tagName).asInstanceOf[Ref]
+    dom.document.createElement(element.tag.tagName).asInstanceOf[Ref]
   }
 
   override def setAttribute[V](element: BaseElement, attr: Attr[V], value: V): Unit = {
