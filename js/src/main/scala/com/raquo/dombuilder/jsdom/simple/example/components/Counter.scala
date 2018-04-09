@@ -2,7 +2,7 @@ package com.raquo.dombuilder.jsdom.simple.example.components
 
 import com.raquo.dombuilder.jsdom.simple.implicits._
 import com.raquo.dombuilder.jsdom.simple.bundle.{button, div, h1, className, onClick, display}
-import com.raquo.dombuilder.jsdom.simple.{SimpleElement, SimpleText}
+import com.raquo.dombuilder.jsdom.simple.{SimpleHtmlElement, SimpleText}
 import org.scalajs.dom
 
 class Counter { // This doesn't need to be a class, could be anything
@@ -12,12 +12,12 @@ class Counter { // This doesn't need to be a class, could be anything
   private val captionNode: SimpleText = count.toString    // Create node to represent the caption that shows the current count
                                                           // Uses implicit conversion simple.implicits.textNode
 
-  private val incButton: SimpleElement[dom.html.Button] = button(    // Create a node to represent the "increment" button
+  private val incButton: SimpleHtmlElement[dom.html.Button] = button(    // Create a node to represent the "increment" button
     onClick := increment _,                         // Add event listener to the button node
     "[ + ]"                                         // Add a child node (which happens to be a text node) to the button node
   )
 
-  val element: SimpleElement[dom.html.Div] = div(    // Create a node that will be either mounted as a root node or added as a child to another node.
+  val element: SimpleHtmlElement[dom.html.Div] = div(    // Create a node that will be either mounted as a root node or added as a child to another node.
     className := "CounterClassBlah",   // Add a CSS class name to this node (not used here, just an example)
     display.inlineBlock,               // Set CSS display property to "inline-block" (just because)
     h1("Counter"),                     // Create an h1 HTML node and add it as a child

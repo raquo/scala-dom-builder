@@ -8,9 +8,9 @@ import com.raquo.domtypes.generic.keys.EventProp
 import org.scalajs.dom
 
 trait SimpleImplicits
-  extends KeyImplicits[SimpleN, dom.Element, dom.Node]
-    with SyntaxImplicits[SimpleN, dom.Element, dom.Node, dom.Event, JsCallback]
-    with SimpleDomApi { this: SetterBuilders[SimpleN, dom.Element, dom.Node] =>
+  extends KeyImplicits[SimpleN, dom.html.Element, dom.svg.Element, dom.Node]
+  with SyntaxImplicits[SimpleN, dom.html.Element, dom.svg.Element, dom.Node, dom.Event, JsCallback]
+  with SimpleDomApi { this: SetterBuilders[SimpleN, dom.html.Element, dom.svg.Element, dom.Node] =>
 
   implicit def eventPropToSyntax[Ev <: dom.Event](
     eventProp: EventProp[Ev]
