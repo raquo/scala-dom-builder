@@ -18,27 +18,27 @@ trait SyntaxImplicits[N, BaseHtmlElementRef <: BaseRef, BaseSvgElementRef <: Bas
 
   private type BaseSvgElement = N with Element[N, BaseSvgElementRef, BaseRef]
 
-  implicit def attrToKeySyntax[V](attr: Attr[V]): KeySyntax[Attr[V], Modifier[BaseHtmlElement]] = {
+  implicit def attrToKeySyntax[V](attr: Attr[V]): KeySyntax[Attr[V]] = {
     new KeySyntax(attr)
   }
 
-  implicit def propToKeySyntax[V, DomV](prop: Prop[V, DomV]): KeySyntax[Prop[V, DomV], Modifier[BaseHtmlElement]] = {
+  implicit def propToKeySyntax[V, DomV](prop: Prop[V, DomV]): KeySyntax[Prop[V, DomV]] = {
     new KeySyntax(prop)
   }
 
-  implicit def intStyleToKeySyntax(style: Style[Int]): KeySyntax[Style[Int], Modifier[BaseHtmlElement]] = {
+  implicit def intStyleToKeySyntax(style: Style[Int]): KeySyntax[Style[Int]] = {
     new KeySyntax(style)
   }
 
-  implicit def doubleStyleToKeySyntax(style: Style[Double]): KeySyntax[Style[Double], Modifier[BaseHtmlElement]] = {
+  implicit def doubleStyleToKeySyntax(style: Style[Double]): KeySyntax[Style[Double]] = {
     new KeySyntax(style)
   }
 
-  implicit def stringStyleToKeySyntax(style: Style[_]): KeySyntax[Style[_], Modifier[BaseHtmlElement]] = {
+  implicit def stringStyleToKeySyntax(style: Style[_]): KeySyntax[Style[_]] = {
     new KeySyntax(style)
   }
 
-  implicit def svgAttrToKeySyntax[V](attr: SvgAttr[V]): KeySyntax[SvgAttr[V], Modifier[BaseSvgElement]] = {
+  implicit def svgAttrToKeySyntax[V](attr: SvgAttr[V]): KeySyntax[SvgAttr[V]] = {
     new KeySyntax(attr)
   }
 
