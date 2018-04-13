@@ -16,11 +16,12 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
 
   /** @return Whether child was successfully appended */
   def appendChild(child: BaseChildNode)(implicit treeApi: TreeApi[N, BaseRef]): Boolean = {
+    val nextParent = Some(this)
+    child.willSetParent(nextParent)
+
     // 1. Update DOM
     val appended = treeApi.appendChild(parent = this, child = child)
     if (appended) {
-      val nextParent = Some(this)
-      child.willSetParent(nextParent)
 
       // 2. Update this node
       if (_maybeChildren.isEmpty) {
