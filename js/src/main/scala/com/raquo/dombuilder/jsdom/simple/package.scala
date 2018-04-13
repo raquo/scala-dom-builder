@@ -2,27 +2,20 @@ package com.raquo.dombuilder.jsdom
 
 import com.raquo.dombuilder.generic.builders.SetterBuilders
 import com.raquo.dombuilder.generic.nodes.{ChildNode, Element}
-import com.raquo.dombuilder.jsdom.nodes.{JsComment, JsElement, JsRoot, JsText}
 import com.raquo.domtypes.generic.Modifier
-import com.raquo.domtypes.generic.builders.canonical.{CanonicalAttrBuilder, CanonicalEventPropBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder}
-import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, Attrs}
+import com.raquo.domtypes.generic.builders.canonical.{CanonicalAttrBuilder, CanonicalEventPropBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder, CanonicalSvgAttrBuilder}
+import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, Attrs, SvgAttrs}
 import com.raquo.domtypes.generic.defs.props.Props
 import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedAttrs
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
-import com.raquo.domtypes.generic.keys.{Attr, EventProp, Prop}
+import com.raquo.domtypes.generic.keys.{Attr, EventProp, Prop, SvgAttr}
 import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MediaEventProps, MiscellaneousEventProps, MouseEventProps, WindowOnlyEventProps}
-import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, TableTags, TextTags}
+import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, SvgTags, TableTags, TextTags}
 import org.scalajs.dom
 
 package object simple {
 
-  type SimpleElement[Ref <: dom.Element] = SimpleN with JsElement[SimpleN, Ref]
-  type SimpleBaseElement = SimpleN with JsElement[SimpleN, dom.Element]
-  type SimpleHtmlElement = SimpleN with JsElement[SimpleN, dom.html.Element]
-  type SimpleText = SimpleN with JsText[SimpleN]
-  type SimpleComment = SimpleN with JsComment[SimpleN]
-
-  type SimpleStyleSetter = Modifier[SimpleN with Element[SimpleN, dom.Element, dom.Node]]
+  type SimpleStyleSetter = Modifier[SimpleN with Element[SimpleN, dom.html.Element, dom.Node]]
 
   type ReflectedAttr[V, DomV] = Attr[V]
 
@@ -47,47 +40,48 @@ package object simple {
     with Styles[SimpleStyleSetter]
     with Styles2[SimpleStyleSetter]
     // Tags
-    with DocumentTags[SimpleTag]
-    with EmbedTags[SimpleTag]
-    with FormTags[SimpleTag]
-    with GroupingTags[SimpleTag]
-    with MiscTags[SimpleTag]
-    with SectionTags[SimpleTag]
-    with TableTags[SimpleTag]
-    with TextTags[SimpleTag]
+    with DocumentTags[SimpleHtmlTag]
+    with EmbedTags[SimpleHtmlTag]
+    with FormTags[SimpleHtmlTag]
+    with GroupingTags[SimpleHtmlTag]
+    with MiscTags[SimpleHtmlTag]
+    with SectionTags[SimpleHtmlTag]
+    with TableTags[SimpleHtmlTag]
+    with TextTags[SimpleHtmlTag]
     // Builders
     with CanonicalAttrBuilder
     with CanonicalReflectedAttrBuilder
     with CanonicalEventPropBuilder[dom.Event]
     with CanonicalPropBuilder
-    with SimpleTagBuilder
-    with SetterBuilders[SimpleN, dom.Element, dom.Node]
+    with SimpleHtmlTagBuilder
+    with SetterBuilders[SimpleN, dom.html.Element, dom.svg.Element, dom.Node]
     // Other
-    with SimpleImplicits
+    with SimpleImplicits {
+
+    @inline def comment(text: String): SimpleComment = new SimpleComment(text)
+
+    object svg
+      extends SvgTags[SimpleSvgTag]
+      with SvgAttrs[SvgAttr]
+      with CanonicalSvgAttrBuilder
+      with SimpleSvgTagBuilder
+  }
 
   def mount(
     container: dom.Element,
     child: SimpleN with ChildNode[SimpleN, dom.Node, dom.Node]
-  ): SimpleN with JsRoot[SimpleN] = {
-    new JsRoot[SimpleN](container, child, SimpleDomApi.treeApi) with SimpleN
-  }
+  ): SimpleRoot = new SimpleRoot(container, child)
 
   /** Import `implicits._` if you don't want to import `bundle._` */
   object implicits
     extends SimpleImplicits
-    with SetterBuilders[SimpleN, dom.Element, dom.Node]
+    with SetterBuilders[SimpleN, dom.html.Element, dom.svg.Element, dom.Node]
 
   object builders {
 
-    @inline def comment(text: String): JsComment[SimpleN] with SimpleN = {
-      new JsComment[SimpleN](text, SimpleDomApi.commentApi, SimpleDomApi.treeApi) with SimpleN
-    }
-
     // @TODO[API] This is used mostly for testing. Should we keep it here?
-    val commentNode: () => JsComment[SimpleN] with SimpleN = () => comment("")
+    val commentNode: () => SimpleComment = () => bundle.comment("")
 
-    val textNode: () => JsText[SimpleN] with SimpleN = () => {
-      new JsText[SimpleN]("", SimpleDomApi.textApi, SimpleDomApi.treeApi) with SimpleN
-    }
+    val textNode: () => SimpleText = () => new SimpleText("")
   }
 }

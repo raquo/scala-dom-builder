@@ -1,6 +1,6 @@
 package com.raquo.dombuilder
 
-import com.raquo.dombuilder.jsdom.simple.builders.{comment, commentNode}
+import com.raquo.dombuilder.jsdom.simple.builders.commentNode
 import com.raquo.dombuilder.jsdom.simple.bundle._
 
 class ElementSpec extends UnitSpec {

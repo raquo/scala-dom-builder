@@ -5,9 +5,7 @@ import org.scalajs.dom
 
 trait JsCommentApi[N] extends CommentApi[N, dom.Comment, dom.Node] {
 
-  override def createNode: dom.Comment = dom.document.createComment("")
-
-  override def getText(node: CommentNode): String = node.ref.textContent
+  override def createNode(text: String): dom.Comment = dom.document.createComment(text)
 
   override def setText(node: CommentNode, text: String): Unit = {
     node.ref.textContent = text

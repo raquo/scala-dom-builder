@@ -22,12 +22,12 @@ object App {
     })
   }
 
-  def renderCounter(): SimpleHtmlElement = {
+  def renderCounter(): SimpleHtmlElement[dom.html.Element] = {
     val counter = new Counter()
     counter.element
   }
 
-  def renderToggle(): SimpleHtmlElement = {
+  def renderToggle(): SimpleHtmlElement[dom.html.Element] = {
     val toggle = new Toggle(initialIsChecked = true)
 
 //    dom.window.setInterval(() => {

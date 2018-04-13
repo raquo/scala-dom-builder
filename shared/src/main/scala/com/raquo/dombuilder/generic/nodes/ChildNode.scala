@@ -43,6 +43,9 @@ trait ChildNode[N, +Ref <: BaseRef, BaseRef]
   @inline def willSetParent(maybeNextParent: Option[BaseParentNode]): Unit = {}
 
   override def apply(parentNode: BaseParentNode): Unit = {
+    // @TODO[Performance] This requires carrying a reference to JsTreeApi on every node instance.
+    // @TODO[Performance] Consider making ChildNode -> Modifier conversion implicit instead (but watch compile times)
+    // @TODO[Performance] Also, check that treeApi even exists in fullOpt. Is it possible to optimize it away?
     parentNode.appendChild(this)(treeApi)
   }
 }
