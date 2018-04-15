@@ -38,8 +38,7 @@ lazy val root = project.in(file("."))
   .aggregate(js, jvm)
   .settings(releaseSettings)
   .settings(
-    publish := {},
-    publishLocal := {}
+    skip in publish := true
   )
 
 lazy val dombuilder = crossProject.in(file("."))
