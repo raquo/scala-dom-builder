@@ -5,7 +5,7 @@ import com.raquo.dombuilder.generic.modifiers.Setter
 import com.raquo.dombuilder.generic.nodes.Element
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.domtypes.generic.builders.StyleBuilders
-import com.raquo.domtypes.generic.keys.{Attr, Prop, Style, SvgAttr}
+import com.raquo.domtypes.generic.keys.{HtmlAttr, Prop, Style, SvgAttr}
 
 /** These [[Setter]] factories are used in
   * [[com.raquo.dombuilder.generic.KeyImplicits]] to support syntax like `attr := value`
@@ -21,8 +21,8 @@ trait SetterBuilders[N, BaseHtmlElementRef <: BaseRef, BaseSvgElementRef <: Base
 
   val svgElementApi: SvgElementApi[N, BaseSvgElementRef, BaseRef]
 
-  @inline def buildAttrSetter[V](key: Attr[V], value: V): Setter[Attr[V], V, BaseHtmlElement] = {
-    new Setter(key, value, htmlElementApi.setAttribute)
+  @inline def buildHtmlAttrSetter[V](key: HtmlAttr[V], value: V): Setter[HtmlAttr[V], V, BaseHtmlElement] = {
+    new Setter(key, value, htmlElementApi.setHtmlAttribute)
   }
 
   @inline def buildPropSetter[V, DomV](key: Prop[V, DomV], value: V): Setter[Prop[V, DomV], V, BaseHtmlElement] = {

@@ -6,8 +6,8 @@ val releaseSettings: Seq[Setting[_]] = Seq(
   name := "Scala DOM Builder",
   normalizedName := "dombuilder",
   organization := "com.raquo",
-  scalaVersion in ThisBuild := "2.12.4", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
-  crossScalaVersions in ThisBuild := Seq("2.11.11", "2.12.4"), // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
+  scalaVersion in ThisBuild := "2.12.5", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
+  crossScalaVersions in ThisBuild := Seq("2.11.12", "2.12.5"), // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
   homepage := Some(url("https://github.com/raquo/scala-dom-builder")),
   licenses += ("MIT", url("https://github.com/raquo/scala-dom-builder/blob/master/LICENSE.txt")),
   scmInfo := Some(
@@ -52,7 +52,7 @@ lazy val dombuilder = crossProject.in(file("."))
   .settings(releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.6"
+      "com.raquo" %%% "domtypes" % "0.6.1-SNAPSHOT"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
@@ -63,9 +63,9 @@ lazy val dombuilder = crossProject.in(file("."))
     emitSourceMaps in fastOptJS := false,
     emitSourceMaps in fullOptJS := false,
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.4",
-      "org.scalatest" %%% "scalatest" % "3.0.4" % Test,
-      "com.raquo" %%% "domtestutils" % "0.6" % Test
+      "org.scala-js" %%% "scalajs-dom" % "0.9.5",
+      "org.scalatest" %%% "scalatest" % "3.0.5" % Test,
+      "com.raquo" %%% "domtestutils" % "0.6.1-SNAPSHOT" % Test
     )
   )
   .jvmSettings()

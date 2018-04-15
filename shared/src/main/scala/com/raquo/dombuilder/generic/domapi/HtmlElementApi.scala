@@ -1,7 +1,7 @@
 package com.raquo.dombuilder.generic.domapi
 
 import com.raquo.dombuilder.generic.nodes.Element
-import com.raquo.domtypes.generic.keys.{Attr, Prop, Style}
+import com.raquo.domtypes.generic.keys.{HtmlAttr, Prop, Style}
 
 trait HtmlElementApi[N, BaseHtmlElementRef <: BaseRef, BaseRef] {
 
@@ -9,9 +9,9 @@ trait HtmlElementApi[N, BaseHtmlElementRef <: BaseRef, BaseRef] {
 
   def createHtmlElement[Ref <: BaseHtmlElementRef](element: N with Element[N, Ref, BaseRef]): Ref
 
-  def setAttribute[V](element: BaseHtmlElement, attr: Attr[V], value: V): Unit
+  def setHtmlAttribute[V](element: BaseHtmlElement, attr: HtmlAttr[V], value: V): Unit
 
-  def removeAttribute(element: BaseHtmlElement, attr: Attr[_]): Unit
+  def removeHtmlAttribute(element: BaseHtmlElement, attr: HtmlAttr[_]): Unit
 
   def setProperty[V, DomV](element: BaseHtmlElement, prop: Prop[V, DomV], value: V): Unit
 

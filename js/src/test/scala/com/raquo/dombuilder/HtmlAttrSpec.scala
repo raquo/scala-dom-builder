@@ -4,7 +4,7 @@ import com.raquo.dombuilder.jsdom.simple.bundle._
 
 import scala.util.Random
 
-class AttrSpec extends UnitSpec {
+class HtmlAttrSpec extends UnitSpec {
 
   it("sets attrs") {
     val expectedTitle = randomString("title_")

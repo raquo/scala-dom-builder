@@ -1,8 +1,6 @@
 package com.raquo.dombuilder.generic.syntax
 
-import com.raquo.dombuilder.generic.nodes.Element
-import com.raquo.domtypes.generic.Modifier
-import com.raquo.domtypes.generic.keys.{Attr, Prop, Style, SvgAttr}
+import com.raquo.domtypes.generic.keys.{HtmlAttr, Prop, Style, SvgAttr}
 
 /** This trait defines implicit conversions that power Scala DOM Builder syntax,
   * namely the `key := value` setter creation, and `tag(...modifiers)` element creation.
@@ -14,11 +12,7 @@ import com.raquo.domtypes.generic.keys.{Attr, Prop, Style, SvgAttr}
   */
 trait SyntaxImplicits[N, BaseHtmlElementRef <: BaseRef, BaseSvgElementRef <: BaseRef, BaseRef, BaseEvent, Callback[- _]] {
 
-  private type BaseHtmlElement = N with Element[N, BaseHtmlElementRef, BaseRef]
-
-  private type BaseSvgElement = N with Element[N, BaseSvgElementRef, BaseRef]
-
-  implicit def attrToKeySyntax[V](attr: Attr[V]): KeySyntax[Attr[V]] = {
+  implicit def htmlAttrToKeySyntax[V](attr: HtmlAttr[V]): KeySyntax[HtmlAttr[V]] = {
     new KeySyntax(attr)
   }
 
@@ -42,10 +36,4 @@ trait SyntaxImplicits[N, BaseHtmlElementRef <: BaseRef, BaseSvgElementRef <: Bas
     new KeySyntax(attr)
   }
 
-  // @TODO[API,IDE] IntelliJ 2017.2 does not understand such conversions. Maybe some types are not quite right?
-  //  implicit def keyToSyntax[K <: Key, Element](key: K): KeySyntax[K, Modifier[Element]] = new KeySyntax(key)
-
-  //  implicit def eventPropToSyntax[Ev <: BaseEvent](
-  //    eventProp: EventProp[Ev]
-  //  ): EventPropSyntax[N, BaseElementRef, BaseRef, Ev, BaseEvent, Callback] = new EventPropSyntax(eventProp)
 }

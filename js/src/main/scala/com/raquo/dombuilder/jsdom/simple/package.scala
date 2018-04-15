@@ -3,12 +3,12 @@ package com.raquo.dombuilder.jsdom
 import com.raquo.dombuilder.generic.builders.SetterBuilders
 import com.raquo.dombuilder.generic.nodes.{ChildNode, Element}
 import com.raquo.domtypes.generic.Modifier
-import com.raquo.domtypes.generic.builders.canonical.{CanonicalAttrBuilder, CanonicalEventPropBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder, CanonicalSvgAttrBuilder}
+import com.raquo.domtypes.generic.builders.canonical.{CanonicalEventPropBuilder, CanonicalHtmlAttrBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder, CanonicalSvgAttrBuilder}
 import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, Attrs, SvgAttrs}
 import com.raquo.domtypes.generic.defs.props.Props
 import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedAttrs
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
-import com.raquo.domtypes.generic.keys.{Attr, EventProp, Prop, SvgAttr}
+import com.raquo.domtypes.generic.keys.{EventProp, HtmlAttr, Prop, SvgAttr}
 import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MediaEventProps, MiscellaneousEventProps, MouseEventProps, WindowOnlyEventProps}
 import com.raquo.domtypes.jsdom.defs.tags.{DocumentTags, EmbedTags, FormTags, GroupingTags, MiscTags, SectionTags, SvgTags, TableTags, TextTags}
 import org.scalajs.dom
@@ -17,12 +17,12 @@ package object simple {
 
   type SimpleStyleSetter = Modifier[SimpleN with Element[SimpleN, dom.html.Element, dom.Node]]
 
-  type ReflectedAttr[V, DomV] = Attr[V]
+  type ReflectedAttr[V, DomV] = HtmlAttr[V]
 
   object bundle
     // Attrs
-    extends Attrs[Attr]
-    with AriaAttrs[Attr]
+    extends Attrs[HtmlAttr]
+    with AriaAttrs[HtmlAttr]
     // Event Props
     with ClipboardEventProps[EventProp]
     with ErrorEventProps[EventProp]
@@ -49,7 +49,7 @@ package object simple {
     with TableTags[SimpleHtmlTag]
     with TextTags[SimpleHtmlTag]
     // Builders
-    with CanonicalAttrBuilder
+    with CanonicalHtmlAttrBuilder
     with CanonicalReflectedAttrBuilder
     with CanonicalEventPropBuilder[dom.Event]
     with CanonicalPropBuilder

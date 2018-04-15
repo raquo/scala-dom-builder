@@ -2,10 +2,11 @@ package com.raquo.dombuilder.jsdom.domapi
 
 import com.raquo.dombuilder.generic.domapi.HtmlElementApi
 import com.raquo.dombuilder.generic.nodes.Element
-import com.raquo.domtypes.generic.keys.{Attr, Prop, Style}
+import com.raquo.domtypes.generic.keys.{HtmlAttr, Prop, Style}
 import org.scalajs.dom
 
 import scala.scalajs.js
+import scala.scalajs.js.|
 
 // @TODO[API] Extract Dom API into a separate Scala DOM API package. Eventually.
 
@@ -15,16 +16,16 @@ trait JsHtmlElementApi[N] extends HtmlElementApi[N, dom.html.Element, dom.Node] 
     dom.document.createElement(element.tag.name).asInstanceOf[Ref]
   }
 
-  override def setAttribute[V](element: BaseHtmlElement, attr: Attr[V], value: V): Unit = {
+  override def setHtmlAttribute[V](element: BaseHtmlElement, attr: HtmlAttr[V], value: V): Unit = {
     val domValue = attr.codec.encode(value)
     if (domValue == null) { // End users should use `removeAttribute` instead. This is to support boolean attributes.
-      removeAttribute(element, attr)
+      removeHtmlAttribute(element, attr)
     } else {
       element.ref.setAttribute(attr.name, domValue.toString)
     }
   }
 
-  override def removeAttribute(element: BaseHtmlElement, attr: Attr[_]): Unit = {
+  override def removeHtmlAttribute(element: BaseHtmlElement, attr: HtmlAttr[_]): Unit = {
     element.ref.removeAttribute(attr.name)
   }
 
@@ -39,6 +40,10 @@ trait JsHtmlElementApi[N] extends HtmlElementApi[N, dom.html.Element, dom.Node] 
 
   override def setStringStyle(element: BaseHtmlElement, style: Style[_], value: String): Unit = {
     setRefStyle(element.ref, style.name, value)
+  }
+
+  def setAnyStyle[V](element: BaseHtmlElement, style: Style[V], value: V | String): Unit = {
+    setRefStyle(element.ref, style.name, cssValue(value))
   }
 
   @inline private def cssValue(value: Any): js.Any = {
