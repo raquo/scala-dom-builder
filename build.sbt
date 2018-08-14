@@ -45,7 +45,7 @@ lazy val dombuilder = crossProject.in(file("."))
   .settings(releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.7"
+      "com.raquo" %%% "domtypes" % "0.7.2-SNAPSHOT"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
