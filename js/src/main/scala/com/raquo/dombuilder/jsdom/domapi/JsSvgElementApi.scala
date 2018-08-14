@@ -20,11 +20,13 @@ trait JsSvgElementApi[N] extends SvgElementApi[N, dom.svg.Element, dom.Node] {
     if (domValue == null) { // End users should use `removeSvgAttribute` instead. This is to support boolean attributes.
       removeSvgAttribute(element, attr)
     } else {
-      element.ref.setAttributeNS(namespaceURI = svgNamespaceUri, qualifiedName = attr.name, value = domValue)
+      //namespace must be set to null according to : https://developer.mozilla.org/en-US/docs/Web/SVG/Namespaces_Crash_Course#Scripting_in_namespaced_XML
+      element.ref.setAttributeNS(namespaceURI = null, qualifiedName = attr.name, value = domValue)
     }
   }
 
   override def removeSvgAttribute(element: BaseSvgElement, attr: SvgAttr[_]): Unit = {
-    element.ref.removeAttributeNS(namespaceURI = svgNamespaceUri, localName = attr.name)
+    //namespace must be set to null according to : https://developer.mozilla.org/en-US/docs/Web/SVG/Namespaces_Crash_Course#Scripting_in_namespaced_XML    
+    element.ref.removeAttributeNS(namespaceURI = null, localName = attr.name)
   }
 }
