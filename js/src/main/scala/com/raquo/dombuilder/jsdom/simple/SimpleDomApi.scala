@@ -1,9 +1,10 @@
 package com.raquo.dombuilder.jsdom.simple
 
-import com.raquo.dombuilder.jsdom.domapi.{JsCommentApi, JsElementApi, JsEventApi, JsTextApi, JsTreeApi}
+import com.raquo.dombuilder.jsdom.domapi.{JsCommentApi, JsEventApi, JsHtmlElementApi, JsSvgElementApi, JsTextApi, JsTreeApi}
 
 trait SimpleDomApi {
-  implicit val elementApi: JsElementApi[SimpleN] = SimpleDomApi.elementApi
+  implicit val htmlElementApi: JsHtmlElementApi[SimpleN] = SimpleDomApi.htmlElementApi
+  implicit val svgElementApi: JsSvgElementApi[SimpleN] = SimpleDomApi.svgElementApi
   implicit val eventApi: JsEventApi[SimpleN] = SimpleDomApi.eventApi
   implicit val commentApi: JsCommentApi[SimpleN] = SimpleDomApi.commentApi
   implicit val textApi: JsTextApi[SimpleN] = SimpleDomApi.textApi
@@ -11,7 +12,8 @@ trait SimpleDomApi {
 }
 
 object SimpleDomApi {
-  val elementApi: JsElementApi[SimpleN] = new JsElementApi[SimpleN] {}
+  val htmlElementApi: JsHtmlElementApi[SimpleN] = new JsHtmlElementApi[SimpleN] {}
+  val svgElementApi: JsSvgElementApi[SimpleN] = new JsSvgElementApi[SimpleN] {}
   val eventApi: JsEventApi[SimpleN] = new JsEventApi[SimpleN] {}
   val commentApi: JsCommentApi[SimpleN] = new JsCommentApi[SimpleN] {}
   val textApi: JsTextApi[SimpleN] = new JsTextApi[SimpleN] {}

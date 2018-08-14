@@ -6,8 +6,8 @@ val releaseSettings: Seq[Setting[_]] = Seq(
   name := "Scala DOM Builder",
   normalizedName := "dombuilder",
   organization := "com.raquo",
-  scalaVersion in ThisBuild := "2.11.11", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
-  crossScalaVersions in ThisBuild := Seq("2.11.11", "2.12.3"), // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
+  scalaVersion in ThisBuild := "2.12.5", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
+  crossScalaVersions in ThisBuild := Seq("2.11.12", "2.12.5"), // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
   homepage := Some(url("https://github.com/raquo/scala-dom-builder")),
   licenses += ("MIT", url("https://github.com/raquo/scala-dom-builder/blob/master/LICENSE.txt")),
   scmInfo := Some(
@@ -27,13 +27,7 @@ val releaseSettings: Seq[Setting[_]] = Seq(
   sonatypeProfileName := "com.raquo",
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
+  publishTo := sonatypePublishTo.value,
   releaseCrossBuild := true,
   pomIncludeRepository := { _ => false },
   useGpg := false,
@@ -44,15 +38,14 @@ lazy val root = project.in(file("."))
   .aggregate(js, jvm)
   .settings(releaseSettings)
   .settings(
-    publish := {},
-    publishLocal := {}
+    skip in publish := true
   )
 
 lazy val dombuilder = crossProject.in(file("."))
   .settings(releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.5"
+      "com.raquo" %%% "domtypes" % "0.7"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
@@ -63,9 +56,9 @@ lazy val dombuilder = crossProject.in(file("."))
     emitSourceMaps in fastOptJS := false,
     emitSourceMaps in fullOptJS := false,
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.4",
-      "org.scalatest" %%% "scalatest" % "3.0.4" % Test,
-      "com.raquo" %%% "domtestutils" % "0.5" % Test
+      "org.scala-js" %%% "scalajs-dom" % "0.9.5",
+      "com.raquo" %%% "domtestutils" % "0.7" % Test,
+      "org.scalatest" %%% "scalatest" % "3.0.5" % Test
     )
   )
   .jvmSettings()

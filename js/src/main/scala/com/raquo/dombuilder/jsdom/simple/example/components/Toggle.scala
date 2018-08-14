@@ -1,8 +1,9 @@
 package com.raquo.dombuilder.jsdom.simple.example.components
 
-import com.raquo.dombuilder.jsdom.simple.bundle.{checked, className, div, input, onChange, typ, color}
+import com.raquo.dombuilder.jsdom.simple.bundle.{checked, className, color, div, input, onChange, typ}
 import com.raquo.dombuilder.jsdom.simple.implicits._
 import com.raquo.dombuilder.jsdom.simple.{SimpleHtmlElement, SimpleText}
+import org.scalajs.dom
 
 class Toggle(initialIsChecked: Boolean) {
 
@@ -15,7 +16,7 @@ class Toggle(initialIsChecked: Boolean) {
 
   private val captionNode: SimpleText = captionText
 
-  val element: SimpleHtmlElement = div(
+  val element: SimpleHtmlElement[dom.html.Element] = div(
     className := "Toggle",
     div(
       inputNode,
@@ -31,7 +32,7 @@ class Toggle(initialIsChecked: Boolean) {
     if (force || _isChecked != newIsChecked) {
       _isChecked = !_isChecked
       (checked := newIsChecked).apply(inputNode)
-      captionNode.setText(captionText)
+      captionNode.ref.textContent = captionText
       (color := captionColor).apply(element)
     }
   }

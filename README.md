@@ -2,7 +2,7 @@
 
 _Scala DOM Builder_ is a low level, unopinionated library for building and manipulating DOM trees (objects representing HTML tags and their attributes, properties and styles).
 
-    "com.raquo" %%% "dombuilder" % "0.5"
+    "com.raquo" %%% "dombuilder" % "0.7"
 
 This library can be used in two ways: 1) directly for simple things, and 2) as a flexible foundation for a more opinionated UI library.
 
@@ -26,6 +26,9 @@ mount(org.scalajs.dom.document.body, scalaNode) // Add the Javascript DOM Node t
 You can even build simple components using this low-level API:
 
 ```scala
+
+import com.raquo.dombuilder.jsdom.simple.bundle._
+
 class Counter {    // This doesn't need to be a class, all you need is to build a `SimpleElement` somehow
  
   private var count = 0    // Declare this component's internal state
@@ -33,22 +36,22 @@ class Counter {    // This doesn't need to be a class, all you need is to build 
   private val captionNode: SimpleText = count.toString    // Create node to represent the caption that shows the current count
                                                           // Uses string-to-textnode implicit conversion that you need to import
  
-  private val incButton: SimpleElement = button(    // Create a node to represent the "increment" button
-    onClick := increment _,                         // Add event listener to the button node
-    "[ + ]"                                         // Add a child node (which happens to be a text node) to the button node
-  )
-  
-  val element: SimpleElement = div(    // Create a node that will be either mounted as a root node or added as a child to another node.
-    className := "CounterClassBlah",   // Add a CSS class name to this node (not used here, just an example)
-    display.inlineBlock,               // Set CSS display property to "inline-block" (just because)
-    h1("Counter"),                     // Create an h1 HTML node and add it as a child
-    incButton,                         // Add the "increment" button as a child node
-    captionNode                        // Add the caption as a child node
+  private val incButton: SimpleElement[dom.Element] = button(    // Create a node to represent the "increment" button
+    onClick := increment _,                                      // Add event listener to the button node
+    "[ + ]"                                                      // Add a child node (which happens to be a text node) to the button node
   )
  
-  def increment(): Unit = {                // Callback that will fire on every button click
-    count += 1                             // Update internal component state
-    captionNode.setText(count.toString)    // Update the DOM
+  val element: SimpleElement[dom.Element] = div(    // Create a node that will be either mounted as a root node or added as a child to another node.
+    className := "CounterClassBlah",                // Add a CSS class name to this node (not used here, just an example)
+    display.inlineBlock,                            // Set CSS display property to "inline-block" (just because)
+    h1("Counter"),                                  // Create an h1 HTML node and add it as a child
+    incButton,                                      // Add the "increment" button as a child node
+    captionNode                                     // Add the caption as a child node
+  )
+ 
+  def increment(): Unit = {                         // Callback that will fire on every button click
+    count += 1                                      // Update internal component state
+    captionNode.ref.textContent = count.toString    // Update the DOM
   }
 }
 ```
@@ -65,7 +68,7 @@ This is similar to how Snabbdom is the foundation for many popular Javascript li
 
 _Scala DOM Builder_ is specifically designed to serve as a foundation for more advanced, more opinionated libraries. By itself it is very flexible, it doesn't get in your way with its own opinions. It essentially lets you represent the mutable state of the DOM – your fancy functional reactive / monadic library will have to deal with that mutable state either way, but at least with Scala DOM Builder you can do it from a more convenient, type-safe API.
 
-For an example on how to build your own library on top of _Scala DOM Builder_, check out the code of my library [Laminar](https://github.com/raquo/laminar) which lets you build UI components in a functional reactive way. It was originally based on Snabbdom, and had a lot of unnecessary complexity in its code to deal with the impedance mismatch between the reactive streams API that it provides and the virtual DOM paradigm that it had to be aware of. It is now based on _Scala DOM Builder_, and its code is considerably smaller and faster as a result.
+For an example on how to build your own library on top of _Scala DOM Builder_, check out the code of my library [Laminar](https://github.com/raquo/Laminar) which lets you build UI components in a functional reactive way. It was originally based on Snabbdom, and had a lot of unnecessary complexity in its code to deal with the impedance mismatch between the reactive streams API that it provides and the virtual DOM paradigm that it had to be aware of. It is now based on _Scala DOM Builder_, and its code is considerably smaller and faster as a result.
 
 ## Server Side Rendering
 
@@ -75,12 +78,9 @@ One thing that I definitely want to implement on the JVM is rendering to static 
 
 ## My Related Projects
 
+- [Laminar](https://github.com/raquo/Laminar) – Reactive UI library based on _Scala DOM Builder_
 - [Scala DOM Types](https://github.com/raquo/scala-dom-types) – Type definitions that we use for all the HTML tags, attributes, properties, and styles
 - [Scala DOM TestUtils](https://github.com/raquo/scala-dom-testutils) – Test that your Javascript DOM nodes match your expectations
-- [Laminar](https://github.com/raquo/laminar) – Reactive UI library based on _Scala DOM Builder_
-- [Snabbdom.scala](https://github.com/raquo/Snabbdom.scala) – Scala.js interface to a popular JS virtual DOM library
-- [XStream.scala](https://github.com/raquo/XStream.scala) – Scala.js interface to a simple JS reactive streams library
-- [Cycle.scala](https://github.com/raquo/Cycle.scala) – Scala.js interface to a popular JS functional reactive library
 
 ## Author
 

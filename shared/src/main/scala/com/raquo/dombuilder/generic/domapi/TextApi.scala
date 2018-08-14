@@ -6,9 +6,7 @@ trait TextApi[N, TextRef <: BaseRef, BaseRef] {
 
   type TextNode = N with Text[N, TextRef, BaseRef]
 
-  def createNode: TextRef
-
-  def getText(node: TextNode): String
+  def createNode(text: String): TextRef
 
   def setText(node: TextNode, text: String)
 }
