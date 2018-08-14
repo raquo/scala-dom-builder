@@ -14,11 +14,7 @@ trait JsElementApi[N] extends ElementApi[N, dom.Element, dom.Node] {
   override def createNode[Ref <: dom.Element](element: N with Element[N, Ref, dom.Node]): Ref = {
     dom.document.createElement(element.tagName).asInstanceOf[Ref]
   }
-  
-  override def createNodeNS[Ref <: dom.Element](element: N with Element[N, Ref, dom.Node],ns:String): Ref = {
-    dom.document.createElementNS(ns,element.tagName).asInstanceOf[Ref]
-  }
-  
+
   override def setAttribute[V](element: BaseElement, attr: Attr[V], value: V): Unit = {
     val domValue = attr.codec.encode(value)
     if (domValue == null) { // End users should use `removeAttribute` instead. This is to support boolean attributes.
