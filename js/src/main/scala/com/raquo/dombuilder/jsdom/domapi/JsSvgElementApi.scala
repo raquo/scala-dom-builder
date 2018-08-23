@@ -5,6 +5,10 @@ import com.raquo.dombuilder.generic.nodes.Element
 import com.raquo.domtypes.generic.keys.SvgAttr
 import org.scalajs.dom
 
+/** Regarding namespaces:
+  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Namespaces_Crash_Course#Scripting_in_namespaced_XML
+  * @see https://stackoverflow.com/q/6701705/2601788
+  */
 trait JsSvgElementApi[N] extends SvgElementApi[N, dom.svg.Element, dom.Node] {
 
   private val svgNamespaceUri = "http://www.w3.org/2000/svg"
@@ -20,11 +24,18 @@ trait JsSvgElementApi[N] extends SvgElementApi[N, dom.svg.Element, dom.Node] {
     if (domValue == null) { // End users should use `removeSvgAttribute` instead. This is to support boolean attributes.
       removeSvgAttribute(element, attr)
     } else {
-      element.ref.setAttributeNS(namespaceURI = svgNamespaceUri, qualifiedName = attr.name, value = domValue)
+      element.ref.setAttributeNS(namespaceURI = attr.namespace.orNull, qualifiedName = attr.name, value = domValue)
     }
   }
 
   override def removeSvgAttribute(element: BaseSvgElement, attr: SvgAttr[_]): Unit = {
-    element.ref.removeAttributeNS(namespaceURI = svgNamespaceUri, localName = attr.name)
+    element.ref.removeAttributeNS(namespaceURI = attr.namespace.orNull, localName = localName(attr.name))
+  }
+
+  @inline private def localName(qualifiedName: String): String = {
+    val nsPrefixLength = qualifiedName.indexOf(':')
+    if (nsPrefixLength > -1) {
+      qualifiedName.substring(nsPrefixLength + 1)
+    } else qualifiedName
   }
 }

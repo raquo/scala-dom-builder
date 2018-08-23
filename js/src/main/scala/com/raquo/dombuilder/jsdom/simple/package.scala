@@ -3,10 +3,10 @@ package com.raquo.dombuilder.jsdom
 import com.raquo.dombuilder.generic.builders.SetterBuilders
 import com.raquo.dombuilder.generic.nodes.{ChildNode, Element}
 import com.raquo.domtypes.generic.Modifier
-import com.raquo.domtypes.generic.builders.canonical.{CanonicalEventPropBuilder, CanonicalHtmlAttrBuilder, CanonicalPropBuilder, CanonicalReflectedAttrBuilder, CanonicalSvgAttrBuilder}
-import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, Attrs, SvgAttrs}
+import com.raquo.domtypes.generic.builders.canonical.{CanonicalEventPropBuilder, CanonicalHtmlAttrBuilder, CanonicalPropBuilder, CanonicalReflectedHtmlAttrBuilder, CanonicalSvgAttrBuilder}
+import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, HtmlAttrs, SvgAttrs}
 import com.raquo.domtypes.generic.defs.props.Props
-import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedAttrs
+import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedHtmlAttrs
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
 import com.raquo.domtypes.generic.keys.{EventProp, HtmlAttr, Prop, SvgAttr}
 import com.raquo.domtypes.jsdom.defs.eventProps.{ClipboardEventProps, ErrorEventProps, FormEventProps, KeyboardEventProps, MediaEventProps, MiscellaneousEventProps, MouseEventProps, WindowOnlyEventProps}
@@ -17,11 +17,11 @@ package object simple {
 
   type SimpleStyleSetter = Modifier[SimpleN with Element[SimpleN, dom.html.Element, dom.Node]]
 
-  type ReflectedAttr[V, DomV] = HtmlAttr[V]
+  type ReflectedHtmlAttr[V, DomV] = HtmlAttr[V]
 
   object bundle
     // Attrs
-    extends Attrs[HtmlAttr]
+    extends HtmlAttrs[HtmlAttr]
     with AriaAttrs[HtmlAttr]
     // Event Props
     with ClipboardEventProps[EventProp]
@@ -35,7 +35,7 @@ package object simple {
     // Props
     with Props[Prop]
     // Reflected Attrs
-    with ReflectedAttrs[ReflectedAttr]
+    with ReflectedHtmlAttrs[ReflectedHtmlAttr]
     // Styles
     with Styles[SimpleStyleSetter]
     with Styles2[SimpleStyleSetter]
@@ -50,7 +50,7 @@ package object simple {
     with TextTags[SimpleHtmlTag]
     // Builders
     with CanonicalHtmlAttrBuilder
-    with CanonicalReflectedAttrBuilder
+    with CanonicalReflectedHtmlAttrBuilder
     with CanonicalEventPropBuilder[dom.Event]
     with CanonicalPropBuilder
     with SimpleHtmlTagBuilder
