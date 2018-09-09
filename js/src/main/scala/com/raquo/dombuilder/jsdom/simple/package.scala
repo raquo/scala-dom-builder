@@ -5,6 +5,7 @@ import com.raquo.dombuilder.generic.nodes.{ChildNode, Element}
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.domtypes.generic.builders.canonical.{CanonicalEventPropBuilder, CanonicalHtmlAttrBuilder, CanonicalPropBuilder, CanonicalReflectedHtmlAttrBuilder, CanonicalSvgAttrBuilder}
 import com.raquo.domtypes.generic.defs.attrs.{AriaAttrs, HtmlAttrs, SvgAttrs}
+import com.raquo.domtypes.generic.defs.complex.canonical.{CanonicalComplexHtmlKeys, CanonicalComplexSvgKeys}
 import com.raquo.domtypes.generic.defs.props.Props
 import com.raquo.domtypes.generic.defs.reflectedAttrs.ReflectedHtmlAttrs
 import com.raquo.domtypes.generic.defs.styles.{Styles, Styles2}
@@ -20,9 +21,9 @@ package object simple {
   type ReflectedHtmlAttr[V, DomV] = HtmlAttr[V]
 
   object bundle
+    extends CanonicalComplexHtmlKeys[ReflectedHtmlAttr, HtmlAttr, Prop]
     // Attrs
-    extends HtmlAttrs[HtmlAttr]
-    with AriaAttrs[HtmlAttr]
+    with HtmlAttrs[HtmlAttr]
     // Event Props
     with ClipboardEventProps[EventProp]
     with ErrorEventProps[EventProp]
@@ -60,8 +61,13 @@ package object simple {
 
     @inline def comment(text: String): SimpleComment = new SimpleComment(text)
 
+    object aria
+      extends AriaAttrs[HtmlAttr]
+      with CanonicalHtmlAttrBuilder
+
     object svg
       extends SvgTags[SimpleSvgTag]
+      with CanonicalComplexSvgKeys[SvgAttr]
       with SvgAttrs[SvgAttr]
       with CanonicalSvgAttrBuilder
       with SimpleSvgTagBuilder

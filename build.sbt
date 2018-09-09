@@ -1,6 +1,10 @@
 // @TODO[WTF] Why can't this be inside releaseSettings?
 releaseCrossBuild := true
 
+val commonSettings: Seq[Setting[_]] = Seq(
+  resolvers += "jitpack" at "https://jitpack.io"
+)
+
 // @TODO[SBT] How to extract these shared settings into a separate release.sbt file?
 val releaseSettings: Seq[Setting[_]] = Seq(
   name := "Scala DOM Builder",
@@ -36,16 +40,16 @@ val releaseSettings: Seq[Setting[_]] = Seq(
 
 lazy val root = project.in(file("."))
   .aggregate(js, jvm)
-  .settings(releaseSettings)
+  .settings(commonSettings, releaseSettings)
   .settings(
     skip in publish := true
   )
 
 lazy val dombuilder = crossProject.in(file("."))
-  .settings(releaseSettings)
+  .settings(commonSettings, releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.8"
+      "com.raquo" %%% "domtypes" % "0.9"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
@@ -56,8 +60,7 @@ lazy val dombuilder = crossProject.in(file("."))
     emitSourceMaps in fastOptJS := false,
     emitSourceMaps in fullOptJS := false,
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.5",
-      "com.raquo" %%% "domtestutils" % "0.8" % Test,
+      "com.raquo" %%% "domtestutils" % "0.9" % Test,
       "org.scalatest" %%% "scalatest" % "3.0.5" % Test
     )
   )
