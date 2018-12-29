@@ -2,7 +2,7 @@
 
 _Scala DOM Builder_ is a low level, unopinionated library for building and manipulating DOM trees (objects representing HTML tags and their attributes, properties and styles).
 
-    "com.raquo" %%% "dombuilder" % "0.9"
+    "com.raquo" %%% "dombuilder" % "0.9.1"
 
 This library can be used in two ways: 1) directly for simple things, and 2) as a flexible foundation for a more opinionated UI library.
 

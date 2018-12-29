@@ -2,7 +2,7 @@
 releaseCrossBuild := true
 
 val commonSettings: Seq[Setting[_]] = Seq(
-  resolvers += "jitpack" at "https://jitpack.io"
+//  resolvers += "jitpack" at "https://jitpack.io"
 )
 
 // @TODO[SBT] How to extract these shared settings into a separate release.sbt file?
@@ -10,8 +10,7 @@ val releaseSettings: Seq[Setting[_]] = Seq(
   name := "Scala DOM Builder",
   normalizedName := "dombuilder",
   organization := "com.raquo",
-  scalaVersion in ThisBuild := "2.12.5", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
-  crossScalaVersions in ThisBuild := Seq("2.11.12", "2.12.5"), // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
+  scalaVersion in ThisBuild := "2.12.6", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
   homepage := Some(url("https://github.com/raquo/scala-dom-builder")),
   licenses += ("MIT", url("https://github.com/raquo/scala-dom-builder/blob/master/LICENSE.txt")),
   scmInfo := Some(
@@ -49,7 +48,7 @@ lazy val dombuilder = crossProject.in(file("."))
   .settings(commonSettings, releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.9"
+      "com.raquo" %%% "domtypes" % "0.9.1"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
