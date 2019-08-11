@@ -10,7 +10,7 @@ val releaseSettings: Seq[Setting[_]] = Seq(
   name := "Scala DOM Builder",
   normalizedName := "dombuilder",
   organization := "com.raquo",
-  scalaVersion in ThisBuild := "2.12.6", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
+  scalaVersion in ThisBuild := "2.12.9", // @TODO[WTF] Why exactly do we need `in ThisBuild` here?
   homepage := Some(url("https://github.com/raquo/scala-dom-builder")),
   licenses += ("MIT", url("https://github.com/raquo/scala-dom-builder/blob/master/LICENSE.txt")),
   scmInfo := Some(
@@ -48,7 +48,7 @@ lazy val dombuilder = crossProject.in(file("."))
   .settings(commonSettings, releaseSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "com.raquo" %%% "domtypes" % "0.9.1"
+      "com.raquo" %%% "domtypes" % "0.9.4"
     )
   )
   .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
@@ -60,7 +60,7 @@ lazy val dombuilder = crossProject.in(file("."))
     emitSourceMaps in fullOptJS := false,
     libraryDependencies ++= Seq(
       "com.raquo" %%% "domtestutils" % "0.9" % Test,
-      "org.scalatest" %%% "scalatest" % "3.0.5" % Test
+      "org.scalatest" %%% "scalatest" % "3.0.8" % Test
     )
   )
   .jvmSettings()
