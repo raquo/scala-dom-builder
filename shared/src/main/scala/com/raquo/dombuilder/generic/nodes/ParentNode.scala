@@ -61,7 +61,9 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
     removed
   }
 
-  /** @return Whether child was successfully inserted */
+  /** Note: can also be used to move children, even within the same parent
+    *
+    * @return Whether child was successfully inserted */
   def insertChild(
     child: BaseChildNode,
     atIndex: Int
@@ -92,7 +94,12 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
       }
 
       if (inserted) {
-        // 2. Update this node
+        // 2A. Update child's current parent node
+        child.maybeParent.foreach { childParent =>
+          childParent._maybeChildren.foreach(childParentChildren => childParentChildren -= child)
+        }
+
+        // 2B. Update this node
         children.insert(atIndex, child)
 
         // 3. Update child
