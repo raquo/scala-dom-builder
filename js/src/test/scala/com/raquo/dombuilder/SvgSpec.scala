@@ -50,7 +50,7 @@ class SvgSpec extends UnitSpec {
         fill is "none",
         stroke is "red", // <-- the change
         strokeWidth is "3",
-        xlinkHref isEmpty
+        xlinkHref.isEmpty
       )
     )))
 

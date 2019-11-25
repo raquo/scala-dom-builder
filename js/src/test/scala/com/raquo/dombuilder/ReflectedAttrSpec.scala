@@ -23,7 +23,7 @@ class ReflectedAttrSpec extends UnitSpec {
       td like(
         href is expectedHref,
         alt is expectedAlt,
-        rel isEmpty
+        rel.isEmpty
       )
     )
     unmount()
@@ -31,16 +31,16 @@ class ReflectedAttrSpec extends UnitSpec {
 
   it("sets non-string reflected attrs") {
     mount("input [disabled=false]", input(disabled := false))
-    expectNode(input like(disabled is false, colSpan isEmpty))
+    expectNode(input like(disabled is false, colSpan.isEmpty))
     unmount()
 
     mount("input [disabled=true]", input(disabled := true))
-    expectNode(input like(disabled is true, colSpan isEmpty))
+    expectNode(input like(disabled is true, colSpan.isEmpty))
     unmount()
 
     val expectedColSpan = Random.nextInt(10)
     mount("td [colSpan]", td(colSpan := expectedColSpan))
-    expectNode(td like(colSpan is expectedColSpan, disabled isEmpty))
+    expectNode(td like(colSpan is expectedColSpan, disabled.isEmpty))
     unmount()
   }
 
@@ -103,16 +103,16 @@ class ReflectedAttrSpec extends UnitSpec {
       td like(
         colSpan is expectedColSpan,
         rowSpan is expectedRowSpan,
-        rel isEmpty,
+        rel.isEmpty,
         span like(
           rel is expectedRel1,
-          colSpan isEmpty,
-          rowSpan isEmpty,
+          colSpan.isEmpty,
+          rowSpan.isEmpty,
           expectedText1,
           span like(
             rel is expectedRel2,
-            colSpan isEmpty,
-            rowSpan isEmpty,
+            colSpan.isEmpty,
+            rowSpan.isEmpty,
             expectedText2
           )
         ),

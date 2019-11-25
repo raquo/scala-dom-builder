@@ -23,7 +23,7 @@ class HtmlAttrSpec extends UnitSpec {
       td like(
         colSpan is expectedColSpan,
         rowSpan is expectedRowSpan,
-        title isEmpty
+        title.isEmpty
       )
     )
     unmount()
@@ -31,18 +31,18 @@ class HtmlAttrSpec extends UnitSpec {
 
   it("sets boolean attrs") {
     mount("[contentEditable=false]", div(contentEditable := false))
-    expectNode(div like(contentEditable is false, colSpan isEmpty))
+    expectNode(div like(contentEditable is false, colSpan.isEmpty))
     unmount()
 
     mount("[contentEditable=true]", div(contentEditable := true))
-    expectNode(div like(contentEditable is true, colSpan isEmpty))
+    expectNode(div like(contentEditable is true, colSpan.isEmpty))
     unmount()
   }
 
   it("sets integer attrs") {
     val expectedHeight = Random.nextInt(10)
     mount("expectedHeight", td(heightAttr := expectedHeight))
-    expectNode(td like(heightAttr is expectedHeight, selected isEmpty))
+    expectNode(td like(heightAttr is expectedHeight, selected.isEmpty))
     unmount()
   }
 }
