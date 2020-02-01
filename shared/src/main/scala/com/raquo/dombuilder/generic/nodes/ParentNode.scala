@@ -23,7 +23,12 @@ trait ParentNode[N, +Ref <: BaseRef, BaseRef] extends Node[N, Ref, BaseRef] { th
     val appended = treeApi.appendChild(parent = this, child = child)
     if (appended) {
 
-      // 2. Update this node
+      // 2A. Update child's current parent node
+      child.maybeParent.foreach { childParent =>
+        childParent._maybeChildren.foreach(childParentChildren => childParentChildren -= child)
+      }
+
+      // 2B. Update this node
       if (_maybeChildren.isEmpty) {
         _maybeChildren = Some(mutable.Buffer(child))
       } else {
