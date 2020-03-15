@@ -94,7 +94,7 @@ One thing that I definitely want to implement on the JVM is rendering to static 
 
 ## Author
 
-Nikita Gazarov – [raquo.com](http://raquo.com)
+Nikita Gazarov – [@raquo](https://twitter.com/raquo)
 
 ## License
 
