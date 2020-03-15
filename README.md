@@ -8,6 +8,14 @@ _Scala DOM Builder_ is a low level, unopinionated library for building and manip
 
 This library can be used in two ways: 1) directly for simple things, and 2) as a flexible foundation for a more opinionated UI library.
 
+
+## This Project Is Archived
+
+[Laminar](https://github.com/raquo/Laminar) no longer uses _Scala DOM Builder_, and lacking other purpose this project is simply not needed anymore. You can of course fork it and build something on your own, but what I learned from Laminar is that the code in _Scala DOM Builder_ is more useful as a pattern, as a template to be modified to your exact needs. It's not very useful as a rigid abstraction living in a separate library.
+
+If you do end up using this pattern, I suggest you drop the JVM interop unless that is what you need. For a typical Scala.js UI library JVM support is just conceptual overhead.
+
+
 ## 1. Simple / Direct Usage
 
 If all you want is a no-hassle, type-safe way to create and manipulate some DOM nodes / trees in Scala.js, use the provided `jsdom.simple` package, it lets you build DOM nodes using syntax similar to ScalaTags:
