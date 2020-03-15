@@ -1,6 +1,4 @@
 # Scala DOM Builder
-[![Build Status](https://travis-ci.org/raquo/scala-dom-types.svg?branch=master)](https://travis-ci.org/raquo/scala-dom-builder)
-![Maven Central](https://img.shields.io/maven-central/v/com.raquo/dombuilder_sjs0.6_2.13.svg)
 
 _Scala DOM Builder_ is a low level, unopinionated library for building and manipulating DOM trees (objects representing HTML tags and their attributes, properties and styles).
 
